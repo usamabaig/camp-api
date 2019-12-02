@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Role;
+use App\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,5 +23,19 @@ class ApiController extends Controller
 
             return response()->json(['error'=>'Username/Password is incorrect'], 401);
         }
+    }
+
+    public function getRoles()
+    {
+        $roles = Role::get();
+
+        return response()->json($roles);
+    }
+
+    public function getTeams()
+    {
+        $teams = Team::get();
+
+        return response()->json($teams);
     }
 }
