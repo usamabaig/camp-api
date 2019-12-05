@@ -40,7 +40,7 @@ class UserController extends Controller
         $user = new User();
         $user->name = $request->name;
         $user->cnic = $request->cnic;
-        $user->designition = $request->designition;
+        $user->designation = $request->designation;
         $user->employeeCode = $request->employeeCode;
         $user->mobileNumber = $request->mobileNumber;
         $user->email = $request->email;
@@ -89,7 +89,7 @@ class UserController extends Controller
         $user = User::find($id);
         $user->name = $request->name;
         $user->cnic = $request->cnic;
-        $user->designition = $request->designition;
+        $user->designation = $request->designation;
         $user->employeeCode = $request->employeeCode;
         $user->mobileNumber = $request->mobileNumber;
         $user->email = $request->email;
