@@ -90,8 +90,8 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->cnic = $request->cnic;
         $user->designation = $request->designation;
-        $user->employeeCode = $request->employeeCode;
-        $user->mobileNumber = $request->mobileNumber;
+        $user->employee_code = $request->employeeCode;
+        $user->mobile_no = $request->mobileNumber;
         $user->email = $request->email;
         $user->territory = $request->territory;
         $user->district = $request->district;
