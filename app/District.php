@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Region extends Model
+class District extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,6 +12,6 @@ class Region extends Model
      * @var array
      */
     protected $fillable = [
-        'region_name'
+        'district_name'
     ];
 }
