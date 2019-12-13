@@ -20,5 +20,6 @@ Route::post('login', 'ApiController@login');
 Route::get('roles', 'ApiController@getRoles');
 Route::get('teams', 'ApiController@getTeams');
 Route::get('regions', 'ApiController@getRegions');
+Route::get('districts/{region_id}', 'ApiController@getDistricts');
 Route::resource('users', 'UserController');
 Route::resource('camps', 'CampController');

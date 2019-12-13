@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\District;
 use App\Region;
 use App\Role;
 use App\Team;
@@ -45,5 +46,12 @@ class ApiController extends Controller
         $regions = Region::get();
 
         return response()->json($regions);
+    }
+
+    public function getDistricts($region_id)
+    {
+        $district = District::where('region_id', $region_id)->get();
+
+        return response()->json($district);
     }
 }
