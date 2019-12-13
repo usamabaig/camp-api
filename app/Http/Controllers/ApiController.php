@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Region;
 use App\Role;
 use App\Team;
 use Illuminate\Http\Request;
@@ -37,5 +38,12 @@ class ApiController extends Controller
         $teams = Team::get();
 
         return response()->json($teams);
+    }
+
+    public function getRegions()
+    {
+        $regions = Region::get();
+
+        return response()->json($regions);
     }
 }

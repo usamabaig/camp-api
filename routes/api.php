@@ -19,5 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login', 'ApiController@login');
 Route::get('roles', 'ApiController@getRoles');
 Route::get('teams', 'ApiController@getTeams');
+Route::get('regions', 'ApiController@getRegions');
 Route::resource('users', 'UserController');
 Route::resource('camps', 'CampController');
