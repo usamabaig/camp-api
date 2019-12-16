@@ -6,6 +6,7 @@ use App\District;
 use App\Region;
 use App\Role;
 use App\Team;
+use App\Territory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -53,5 +54,12 @@ class ApiController extends Controller
         $district = District::where('region_id', $region_id)->get();
 
         return response()->json($district);
+    }
+
+    public function getTerritories($district_id)
+    {
+        $territories = Territory::where('district_id', $district_id)->get();
+
+        return response()->json($territories);
     }
 }

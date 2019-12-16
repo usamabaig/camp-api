@@ -21,5 +21,6 @@ Route::get('roles', 'ApiController@getRoles');
 Route::get('teams', 'ApiController@getTeams');
 Route::get('regions', 'ApiController@getRegions');
 Route::get('districts/{region_id}', 'ApiController@getDistricts');
+Route::get('territories/{district_id}', 'ApiController@getTerritories');
 Route::resource('users', 'UserController');
 Route::resource('camps', 'CampController');
