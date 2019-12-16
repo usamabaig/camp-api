@@ -20,10 +20,10 @@ class CreateTeamsTable extends Migration
         });
 
         DB::table('teams')->insert([
-            ['team_name' => 'Pacer'],
-            ['team_name' => 'Acer'],
-            ['team_name' => 'Star'],
-            ['team_name' => 'Galaxy'],
+            ['team_name' => 'Pacer', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
+            ['team_name' => 'Acer', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
+            ['team_name' => 'Star', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
+            ['team_name' => 'Galaxy', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
         ]);
     }
 
