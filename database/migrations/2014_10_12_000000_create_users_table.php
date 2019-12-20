@@ -23,12 +23,17 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('territory');
-            $table->string('district');
-            $table->string('region');
-            $table->string('team');
+            $table->unsignedBigInteger('territory');
+            $table->unsignedBigInteger('district');
+            $table->unsignedBigInteger('region');
+            $table->unsignedBigInteger('team');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('territory')->references('id')->on('territories');
+            $table->foreign('district')->references('id')->on('districts');
+            $table->foreign('region')->references('id')->on('regions');
+            $table->foreign('team')->references('id')->on('teams');
         });
     }
 
