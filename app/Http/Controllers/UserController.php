@@ -42,6 +42,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->cnic = $request->cnic;
         $user->designation = $request->designation;
+        $user->password = Hash::make('12345');
         $user->employee_code = $request->employeeCode;
         $user->mobile_no = $request->mobileNumber;
         $user->email = $request->email;
