@@ -5,10 +5,10 @@ $env = getenv('APP_ENV');
 if($env == 'prod') {
     $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
 
-    $host = $url["host"];
-    $username = $url["user"];
-    $password = $url["pass"];
-    $database = substr($url["path"], 1);
+    $host = 'db4free.net';
+    $username = 'camp_root_db';
+    $password = 'root1234';
+    $database = 'camp_api';
 }else {
     $host = env('DB_HOST', '127.0.0.1');
     $username = env('DB_USERNAME', 'forge');
