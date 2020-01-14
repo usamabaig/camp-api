@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Camp;
 use App\District;
 use App\Region;
 use App\Role;
@@ -61,5 +62,15 @@ class ApiController extends Controller
         $territories = Territory::where('district_id', $district_id)->get();
 
         return response()->json($territories);
+    }
+
+    public function approveCamp($camp_id, $user_id)
+    {
+        $flight = Camp::find($camp_id);
+        $flight->is_approved = 1;
+        $flight->approved_by = $user_id;
+        $flight->save();
+
+        return response()->json(['success' => 'Camp approved successfully']);
     }
 }
