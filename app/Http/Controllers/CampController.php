@@ -39,7 +39,7 @@ class CampController extends Controller
     {
         $this->createOrUpdateCamp($request, null);
 
-        return response()->json(['msg' => 'Camp Created Successfully'], 200);
+        return response()->json(['success' => 'Camp Created Successfully'], 200);
     }
 
     /**
@@ -77,7 +77,7 @@ class CampController extends Controller
     {
         $this->createOrUpdateCamp($request, $id);
 
-        return response()->json(['msg' => 'Camp Updated Successfully'], 200);
+        return response()->json(['success' => 'Camp Updated Successfully'], 200);
     }
 
     /**
@@ -90,7 +90,7 @@ class CampController extends Controller
     {
         Camp::where('id', $id)->delete();
 
-        return response()->json(['msg' => 'Camp Deleted Successfully'], 200);
+        return response()->json(['success' => 'Camp Deleted Successfully'], 200);
     }
 
     private function createOrUpdateCamp($request, $id = null)
