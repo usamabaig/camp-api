@@ -25,3 +25,6 @@ Route::get('territories/{district_id}', 'ApiController@getTerritories');
 Route::get('camp/approval/{camp_id}/{user_id}', 'ApiController@approveCamp');
 Route::resource('users', 'UserController');
 Route::resource('camps', 'CampController');
+
+Route::get('patients/{camp_id}', 'ApiController@getPatients');
+Route::post('patient/save', 'ApiController@createPatient');

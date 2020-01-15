@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Camp;
 use App\District;
+use App\Patient;
 use App\Region;
 use App\Role;
 use App\Team;
@@ -72,5 +73,24 @@ class ApiController extends Controller
         $flight->save();
 
         return response()->json(['success' => 'Camp approved successfully']);
+    }
+
+    public function getPatients($camp_id)
+    {
+        $patients = Patient::where('camp_id', $camp_id)->get();
+
+        return response()->json($patients);
+    }
+
+    public function createPatient(Request $request)
+    {
+        $patient = new Patient();
+        $patient->patient_name = $request->patientName;
+        $patient->gender = $request->patientGender;
+        $patient->phone_no = $request->patientPhoneNo;
+        $patient->camp_id = $request->camp_id;
+        $patient->save();
+
+        return response()->json(['success' => 'Patient Added Successfully']);
     }
 }
