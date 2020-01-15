@@ -93,4 +93,14 @@ class ApiController extends Controller
 
         return response()->json(['success' => 'Patient Added Successfully']);
     }
+
+    public function getApprovedCamps($user_id)
+    {
+        $camps = Camp::where([
+            ['user_id' => $user_id],
+            ['is_approved' => 1]
+        ])->get();
+
+        return response()->json($camps);
+    }
 }

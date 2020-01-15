@@ -26,5 +26,6 @@ Route::get('camp/approval/{camp_id}/{user_id}', 'ApiController@approveCamp');
 Route::resource('users', 'UserController');
 Route::resource('camps', 'CampController');
 
+Route::get('approved/camps/{user_id}', 'ApiController@getApprovedCamps');
 Route::get('patients/{camp_id}', 'ApiController@getPatients');
-Route::post('patient/save', 'ApiController@createPatient');
+Route::post('patient/add', 'ApiController@createPatient');
