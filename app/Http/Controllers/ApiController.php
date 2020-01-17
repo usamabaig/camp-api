@@ -103,4 +103,26 @@ class ApiController extends Controller
 
         return response()->json($camps);
     }
+
+    public function startCamp(Request $request)
+    {
+        $camp = Camp::where('id', $request->campId)->first();
+        if ($camp->user_id != $request->campId){
+            return response()->json(['error' => 'Cannot Start Camp at this time. Please contact an admin']);
+        }
+        $earth_radius = 6371;
+
+        $dLat = deg2rad($request->lat - $camp->lat);
+        $dLon = deg2rad($request->lng - $camp->lng);
+
+        $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($camp->lat)) * cos(deg2rad($request->lat)) * sin($dLon/2) * sin($dLon/2);
+        $c = 2 * asin(sqrt($a));
+        $d = $earth_radius * $c;
+
+        if ($d < 1) {
+            return response()->json(['success' => 'Camp started success']);
+        } else {
+            return response()->json(['Error' => 'Cannot start camp at this time'], 401);
+        }
+    }
 }
