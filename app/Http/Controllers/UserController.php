@@ -52,7 +52,7 @@ class UserController extends Controller
         $user->team = $request->team;
         $user->save();
 
-        return response()->json(['msg' => 'User Created Successfully'], 200);
+        return response()->json(['success' => 'User Created Successfully'], 200);
     }
 
     /**
@@ -101,7 +101,7 @@ class UserController extends Controller
         $user->team = $request->team;
         $user->save();
 
-        return response()->json(['msg' => 'User Updated Successfully'], 200);
+        return response()->json(['success' => 'User Updated Successfully'], 200);
     }
 
     /**
@@ -114,6 +114,6 @@ class UserController extends Controller
     {
         User::where('id', $id)->delete();
 
-        return response()->json(['msg' => 'User Deleted Successfully'], 200);
+        return response()->json(['success' => 'User Deleted Successfully'], 200);
     }
 }

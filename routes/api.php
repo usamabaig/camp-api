@@ -29,3 +29,4 @@ Route::resource('camps', 'CampController');
 Route::get('approved/camps/{user_id}', 'ApiController@getApprovedCamps');
 Route::get('patients/{camp_id}', 'ApiController@getPatients');
 Route::post('patient/add', 'ApiController@createPatient');
+Route::post('start/camp', 'ApiController@startCamp');
