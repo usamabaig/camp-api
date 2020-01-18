@@ -41,16 +41,6 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
-$app->middleware([
-    // ...
-    \Barryvdh\Cors\HandleCors::class,
-]);
-
-$app->configure('cors');
-
-$app->register(Barryvdh\Cors\ServiceProvider::class);
-
-
 /*
 |--------------------------------------------------------------------------
 | Return The Application
