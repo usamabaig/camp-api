@@ -120,9 +120,9 @@ class ApiController extends Controller
         $d = $earth_radius * $c;
 
         if ($d < 1) {
-            return response()->json(['success' => 'Camp started success']);
+            return response()->json(['success' => 'Camp started successfully']);
         } else {
-            return response()->json(['Error' => 'Cannot start camp at this time'], 401);
+            return response()->json(['error' => 'Cannot start camp at this time'], 401);
         }
     }
 }
