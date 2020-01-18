@@ -98,6 +98,7 @@ class CampController extends Controller
         $camp = isset($id) ? Camp::find($id) : new Camp();
         $camp->camp_type = $request->campType;
         $camp->dr_name = $request->doctorName;
+        $camp->dr_phone_no = $request->doctorPhoneNumber;
         $camp->camp_datetime = date("Y-m-d H:i:s", strtotime($request->campDateAndTime));
         $camp->address = $request->campAddress;
         $camp->lat = $request->campLat;
