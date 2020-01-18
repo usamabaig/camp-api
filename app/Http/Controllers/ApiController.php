@@ -107,7 +107,7 @@ class ApiController extends Controller
     public function startCamp(Request $request)
     {
         $camp = Camp::where('id', $request->campId)->first();
-        if ($camp->user_id != $request->campId){
+        if ($camp->user_id != $request->userId){
             return response()->json(['error' => 'Cannot Start Camp at this time. Please contact an admin']);
         }
         $earth_radius = 6371;
