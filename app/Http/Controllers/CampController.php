@@ -96,7 +96,6 @@ class CampController extends Controller
     private function createOrUpdateCamp($request, $id = null)
     {
         $camp = isset($id) ? Camp::find($id) : new Camp();
-        $camp->camp_name = $request->campName;
         $camp->camp_type = $request->campType;
         $camp->dr_name = $request->doctorName;
         $camp->camp_datetime = date("Y-m-d H:i:s", strtotime($request->campDateAndTime));
