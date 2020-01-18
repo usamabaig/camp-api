@@ -23,7 +23,7 @@ class CreateRolesTable extends Migration
 
         DB::table('roles')->insert([
             ['role_abv' => 'GM', 'role_name' => 'General Manager', 'level' => 1, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
-            ['role_abv' => 'BM', 'role_name' => 'Branch Manager', 'level' => 1, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
+            ['role_abv' => 'BM', 'role_name' => 'Business Manager', 'level' => 1, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
             ['role_abv' => 'PM', 'role_name' => 'Product Manager', 'level' => 1, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
             ['role_abv' => 'APM', 'role_name' => 'Assistant Product Manager', 'level' => 1, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')],
 
