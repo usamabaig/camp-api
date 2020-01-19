@@ -84,11 +84,25 @@ class ApiController extends Controller
 
     public function createPatient(Request $request)
     {
+        $camp = Camp::where('id', $request->camp_id)->first();
+        $camp_datetime = explode(' ', $camp->camp_datetime);
+        if ($camp->camp_status != 1 || $this->checkCampTime($camp_datetime[1])) {
+            return response()->json(['error' => 'Cannot add patient to closed camp.'], 401);
+        }
         $patient = new Patient();
         $patient->patient_name = $request->patientName;
         $patient->gender = $request->patientGender;
         $patient->phone_no = $request->patientPhoneNo;
         $patient->camp_id = $request->camp_id;
+        if (isset($request->blood_pressure_systolic)){
+            $patient->blood_pressure_systolic = $request->blood_pressure_systolic;
+        }
+        if (isset($request->blood_pressure_diastolic)){
+            $patient->blood_pressure_diastolic = $request->blood_pressure_diastolic;
+        }
+        if (isset($request->blood_sugar)){
+            $patient->blood_sugar = $request->blood_sugar;
+        }
         $patient->save();
 
         return response()->json(['success' => 'Patient Added Successfully']);
@@ -107,8 +121,14 @@ class ApiController extends Controller
     public function startCamp(Request $request)
     {
         $camp = Camp::where('id', $request->campId)->first();
+        $camp_datetime = explode(' ', $camp->camp_datetime);
+
         if ($camp->user_id != $request->userId){
-            return response()->json(['error' => 'Cannot Start Camp at this time. Please contact an admin']);
+            return response()->json(['error' => 'Cannot Start Camp at this time. Please contact an admin'], 401);
+        } else if($camp_datetime[0] != date('Y-m-d')){
+            return response()->json(['error' => 'Cannot Start Camp at this time. Please check date and time of camp']);
+        } else if($this->checkCampTime($camp_datetime[1])) {
+            return response()->json(['error' => 'Cannot Start Camp at this time. Please check date and time of camp']);
         }
         $earth_radius = 6371;
 
@@ -120,9 +140,31 @@ class ApiController extends Controller
         $d = $earth_radius * $c;
 
         if ($d < 1) {
+            $update_camp = Camp::find($camp->id);
+            $update_camp->camp_status = 1;
+            $update_camp->save();
+
             return response()->json(['success' => 'Camp started successfully']);
         } else {
-            return response()->json(['error' => 'Cannot start camp at this time'], 401);
+            return response()->json(['error' => 'Cannot start camp. Please get to camp location to start camp'], 401);
         }
+    }
+
+    private function checkCampTime($camp_time)
+    {
+        $start_time = new \DateTime(date('H:i:s', strtotime($camp_time)-3600));
+        $end_time = new \DateTime(date('H:i:s', strtotime($camp_time)+14400));
+        $current_time = new \DateTime(date('H:i:s', time()));
+
+        return $current_time < $start_time || $current_time > $end_time;
+    }
+
+    public function closeCamp($camp_id)
+    {
+        $camp = Camp::find($camp_id);
+        $camp->camp_status = 2;
+        $camp->save();
+
+        return response()->json(['success' => 'Camp closed successfully']);
     }
 }

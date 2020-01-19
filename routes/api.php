@@ -30,3 +30,4 @@ Route::get('approved/camps/{user_id}', 'ApiController@getApprovedCamps');
 Route::get('patients/{camp_id}', 'ApiController@getPatients');
 Route::post('patient/add', 'ApiController@createPatient');
 Route::post('start/camp', 'ApiController@startCamp');
+Route::get('close/camp/{camp_id}', 'ApiController@closeCamp');
