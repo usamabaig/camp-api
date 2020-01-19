@@ -94,14 +94,14 @@ class ApiController extends Controller
         $patient->gender = $request->patientGender;
         $patient->phone_no = $request->patientPhoneNo;
         $patient->camp_id = $request->camp_id;
-        if (isset($request->bloodPressureSystolic)){
-            $patient->blood_pressure_systolic = $request->bloodPressureSystolic;
+        if (isset($request->patientSystolic)){
+            $patient->blood_pressure_systolic = $request->patientSystolic;
         }
-        if (isset($request->bloodPressureDiastolic)){
-            $patient->blood_pressure_diastolic = $request->bloodPressureDiastolic;
+        if (isset($request->patientDiastolic)){
+            $patient->blood_pressure_diastolic = $request->patientDiastolic;
         }
-        if (isset($request->bloodSugar)){
-            $patient->blood_sugar = $request->bloodSugar;
+        if (isset($request->patientBloodSugar)){
+            $patient->blood_sugar = $request->patientBloodSugar;
         }
         $patient->save();
 
