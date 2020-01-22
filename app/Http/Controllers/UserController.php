@@ -96,6 +96,26 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
+        if ($user->cnic !== $request->cnic){
+            $request->validate([
+                'cnic' => 'required|unique:users,cnic',
+            ]);
+        }
+        if ($user->employee_code !== $request->employeeCode){
+            $request->validate([
+                'employeeCode' => 'required|unique:users,employee_code',
+            ]);
+        }
+        if ($user->mobile_no !== $request->mobileNumber){
+            $request->validate([
+                'mobileNumber' => 'required|unique:users,mobile_no',
+            ]);
+        }
+        if ($user->email !== $request->email){
+            $request->validate([
+                'email' => 'required|unique:users',
+            ]);
+        }
         $user->name = $request->name;
         $user->cnic = $request->cnic;
         $user->designation = $request->designation;
