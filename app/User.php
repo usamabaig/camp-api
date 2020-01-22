@@ -39,4 +39,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function user_territory()
+    {
+        return $this->hasOne('App\Territory', 'id', 'territory');
+    }
+
+    public function user_district()
+    {
+        return $this->hasOne('App\District', 'id', 'district');
+    }
+
+    public function user_region()
+    {
+        return $this->hasOne('App\Region', 'id', 'region');
+    }
+
+    public function user_team()
+    {
+        return $this->hasOne('App\Team', 'id', 'team');
+    }
 }
