@@ -67,10 +67,11 @@ class ApiController extends Controller
 
     public function approveCamp($camp_id, $user_id)
     {
-        $flight = Camp::find($camp_id);
-        $flight->is_approved = 1;
-        $flight->approved_by = $user_id;
-        $flight->save();
+        $camp = Camp::find($camp_id);
+        $camp->is_approved = 1;
+        $camp->approved_by = $user_id;
+        $camp->camp_status = 1;
+        $camp->save();
 
         return response()->json(['success' => 'Camp approved successfully']);
     }
