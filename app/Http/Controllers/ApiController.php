@@ -168,4 +168,14 @@ class ApiController extends Controller
 
         return response()->json(['success' => 'Camp closed successfully']);
     }
+
+    public function getTerritory($territory_id)
+    {
+        return response()->json(Territory::where('id', $territory_id)->first());
+    }
+
+    public function getDistrict($district_id)
+    {
+        return response()->json(District::where('id', $district_id)->first());
+    }
 }

@@ -31,3 +31,5 @@ Route::get('patients/{camp_id}', 'ApiController@getPatients');
 Route::post('patient/add', 'ApiController@createPatient');
 Route::post('start/camp', 'ApiController@startCamp');
 Route::get('close/camp/{camp_id}', 'ApiController@closeCamp');
+Route::get('get/district/{district_id}', 'ApiController@getDistrict');
+Route::get('get/territory/{territory_id}', 'ApiController@getTerritory');
