@@ -92,6 +92,7 @@ class ApiController extends Controller
         }
         $patient = new Patient();
         $patient->patient_name = $request->patientName;
+        $patient->patient_age = $request->patientAge;
         $patient->gender = $request->patientGender;
         $patient->phone_no = $request->patientPhoneNo;
         $patient->camp_id = $request->camp_id;
