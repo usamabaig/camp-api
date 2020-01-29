@@ -99,6 +99,7 @@ class CampController extends Controller
         $camp->camp_type = $request->campType;
         $camp->dr_name = $request->doctorName;
         $camp->dr_phone_no = $request->doctorPhoneNumber;
+        $camp->dr_id = $request->doctorID;
         $camp->camp_datetime = date("Y-m-d H:i:s", strtotime($request->campDateAndTime));
         $camp->address = $request->campAddress;
         $camp->lat = $request->campLat;
