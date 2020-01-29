@@ -39,7 +39,7 @@ class CampController extends Controller
     {
         $this->createOrUpdateCamp($request, null);
 
-        return response()->json(['success' => 'Camp Created Successfully'], 200);
+        return response()->json(['success' => 'Camp Saved Successfully'], 200);
     }
 
     /**
@@ -77,7 +77,7 @@ class CampController extends Controller
     {
         $this->createOrUpdateCamp($request, $id);
 
-        return response()->json(['success' => 'Camp Updated Successfully'], 200);
+        return response()->json(['success' => 'Camp Saved Successfully'], 200);
     }
 
     /**

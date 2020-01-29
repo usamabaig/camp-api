@@ -106,7 +106,7 @@ class ApiController extends Controller
         }
         $patient->save();
 
-        return response()->json(['success' => 'Patient Added Successfully']);
+        return response()->json(['success' => 'Patient Saved Successfully']);
     }
 
     public function getApprovedCamps($user_id)

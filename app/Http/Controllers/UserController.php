@@ -59,7 +59,7 @@ class UserController extends Controller
         $user->team = $request->team;
         $user->save();
 
-        return response()->json(['success' => 'User Created Successfully'], 200);
+        return response()->json(['success' => 'User Saved Successfully'], 200);
     }
 
     /**
@@ -128,7 +128,7 @@ class UserController extends Controller
         $user->team = $request->team;
         $user->save();
 
-        return response()->json(['success' => 'User Updated Successfully'], 200);
+        return response()->json(['success' => 'User Saved Successfully'], 200);
     }
 
     /**
