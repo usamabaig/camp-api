@@ -147,7 +147,7 @@ class ApiController extends Controller
 
             return response()->json(['success' => 'Camp started successfully']);
         } else {
-            return response()->json(['error' => 'Cannot start camp. Please get to camp location to start camp'], 401);
+            return response()->json(['error' => 'Cannot start camp. Please get to camp location to start camp'], 422);
         }
     }
 
