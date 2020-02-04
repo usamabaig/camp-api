@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
-use DB;
+use App\Camp;
 use Illuminate\Http\Request;
 
 class ReportsController extends Controller
@@ -9,7 +9,7 @@ class ReportsController extends Controller
     public function getPresentCamps(Request $request)
     {
 
-        $camp = DB::table('camps')->where(function ($query) use ($request) {
+        $camp = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')->where(function ($query) use ($request) {
             if (isset($request->doctorName)){
                 $query->where('dr_name', 'like', '%'.$request->doctorName.'%');
             }
