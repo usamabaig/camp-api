@@ -27,9 +27,9 @@ class ReportsController extends Controller
 
     public function getPreviousCamps(Request $request)
     {
-        $start_date = isset($request->startDate) ? date('Y-m-d H:i:s', strtotime($request->startDate)) : date('Y-m-d H:i:s',strtotime("-1 days"));
-        $end_date = isset($request->endDate) ? date('Y-m-d H:i:s', strtotime($request->endDate)) : date('Y-m-d H:i:s',strtotime("-1 year"));
-        $date = [$start_date, $end_date];
+        $to_date = isset($request->startDate) ? date('Y-m-d H:i:s', strtotime($request->startDate)) : date('Y-m-d H:i:s',strtotime("-1 days"));
+        $from_date = isset($request->endDate) ? date('Y-m-d H:i:s', strtotime($request->endDate)) : date('Y-m-d H:i:s',strtotime("-1 year"));
+        $date = [$from_date, $to_date];
         $camp = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')->where(function ($query) use ($request) {
             if (isset($request->doctorName)){
                 $query->where('dr_name', 'like', '%'.$request->doctorName.'%');
