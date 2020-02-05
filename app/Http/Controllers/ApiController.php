@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Camp;
 use App\District;
+use App\Notification;
 use App\Patient;
 use App\Region;
 use App\Role;
@@ -72,6 +73,12 @@ class ApiController extends Controller
         $camp->approved_by = $user_id;
         $camp->camp_status = 1;
         $camp->save();
+
+        $notification = new Notification();
+        $notification->notification = 'Camp approved successfully';
+        $notification->user_id = $user_id;
+        $notification->camp_id = $camp_id;
+        $notification->save();
 
         return response()->json(['success' => 'Camp approved successfully']);
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Camp;
+use App\Notification;
 use Illuminate\Http\Request;
 
 class CampController extends Controller
@@ -37,7 +38,13 @@ class CampController extends Controller
      */
     public function store(Request $request)
     {
-        $this->createOrUpdateCamp($request, null);
+        $camp_id = $this->createOrUpdateCamp($request, null);
+
+        $notification = new Notification();
+        $notification->notification = 'Camp approved successfully';
+        $notification->user_id = $request->campUserID;
+        $notification->camp_id = $camp_id->id;
+        $notification->save();
 
         return response()->json(['success' => 'Camp Saved Successfully'], 200);
     }
@@ -111,5 +118,7 @@ class CampController extends Controller
         $camp->no_of_flyers = $request->flyers;
         $camp->no_of_screening_slips = $request->screeingSlips;
         $camp->save();
+
+        return $camp;
     }
 }
