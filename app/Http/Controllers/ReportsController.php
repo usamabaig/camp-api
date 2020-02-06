@@ -51,6 +51,7 @@ class ReportsController extends Controller
             if (isset($request->userName)){
                 $query->where('name', 'like', '%'.$request->userName.'%')
                     ->orWhere('cnic', 'like', '%'.$request->userName.'%')
+                    ->orWhere('email', 'like', '%'.$request->userName.'%')
                     ->orWhere('employee_code', 'like', '%'.$request->userName.'%');
             }
         })->get();
