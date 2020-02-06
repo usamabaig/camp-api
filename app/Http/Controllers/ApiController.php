@@ -186,4 +186,14 @@ class ApiController extends Controller
     {
         return response()->json(District::where('id', $district_id)->first());
     }
+
+    public function getTerritoriesFilter()
+    {
+        return response()->json(Territory::get());
+    }
+
+    public function getDistrictsFilter()
+    {
+        return response()->json(District::get());
+    }
 }

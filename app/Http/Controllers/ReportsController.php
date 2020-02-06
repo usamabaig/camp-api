@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Camp;
+use App\User;
 use Illuminate\Http\Request;
 
 class ReportsController extends Controller
@@ -26,5 +27,34 @@ class ReportsController extends Controller
         })->whereBetween('camp_datetime', $date)->get();
 
         return response()->json($camp);
+    }
+
+    public function getUsers(Request $request)
+    {
+        $users = User::with('user_territory', 'user_district', 'user_region', 'user_team')->where(function ($query) use ($request) {
+            if (isset($request->territory)){
+                $query->where('territory', '=', $request->territory);
+            }
+        })->where(function ($query) use ($request) {
+            if (isset($request->district)){
+                $query->where('district', '=', $request->district);
+            }
+        })->where(function ($query) use ($request) {
+            if (isset($request->region)){
+                $query->where('region', '=', $request->region);
+            }
+        })->where(function ($query) use ($request) {
+            if (isset($request->team)){
+                $query->where('team', '=', $request->team);
+            }
+        })->where(function ($query) use ($request) {
+            if (isset($request->userName)){
+                $query->where('name', 'like', '%'.$request->userName.'%')
+                    ->orWhere('cnic', 'like', '%'.$request->userName.'%')
+                    ->orWhere('employee_code', 'like', '%'.$request->userName.'%');
+            }
+        })->get();
+
+        return response()->json($users);
     }
 }

@@ -26,6 +26,9 @@ Route::get('camp/approval/{camp_id}/{user_id}', 'ApiController@approveCamp');
 Route::resource('users', 'UserController');
 Route::resource('camps', 'CampController');
 
+Route::get('filter/districts', 'ApiController@getDistrictsFilter');
+Route::get('filter/territories', 'ApiController@getTerritoriesFilter');
+
 Route::get('approved/camps/{user_id}', 'ApiController@getApprovedCamps');
 Route::get('patients/{camp_id}', 'ApiController@getPatients');
 Route::post('patient/add', 'ApiController@createPatient');
@@ -36,3 +39,4 @@ Route::get('get/territory/{territory_id}', 'ApiController@getTerritory');
 
 Route::post('get/camps/present', 'ReportsController@getPresentCamps');
 Route::post('get/camps/previous', 'ReportsController@getPreviousCamps');
+Route::post('get/users/report', 'ReportsController@getUsers');
