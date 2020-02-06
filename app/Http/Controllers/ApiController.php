@@ -122,9 +122,8 @@ class ApiController extends Controller
         $today_date = date('Y-m-d');
         $camps = Camp::where([
             ['user_id', '=', $user_id],
-            ['is_approved', '=', 1],
-            ['camp_datetime', '=', $today_date . ' 23:59:59']
-        ])->get();
+            ['is_approved', '=', 1]
+        ])->whereDate('camp_datetime', $today_date)->get();
 
         return response()->json($camps);
     }
