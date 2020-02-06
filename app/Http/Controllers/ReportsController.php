@@ -21,6 +21,10 @@ class ReportsController extends Controller
                 $query->where('camp_type', '=', $request->campType);
             }
         })->where(function ($query) use ($request) {
+            if (isset($request->userID)){
+                $query->where('user_id', '=', $request->userID);
+            }
+        })->where(function ($query) use ($request) {
             if (isset($request->campStatus)){
                 $query->where('camp_status', '=', $request->campStatus);
             }
