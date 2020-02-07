@@ -6,6 +6,7 @@ use App\Patient;
 use App\User;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class ReportsController extends Controller
 {
@@ -83,7 +84,7 @@ class ReportsController extends Controller
 
     public function getPatients(Request $request)
     {
-        $patients = Patient::with('camps')->where(function ($query) use ($request) {
+        $patients = Patient::whereHas('camps', function (Builder $query) use ($request) {
             if (isset($request->campType)){
                 $query->where('camp_type', '=', $request->campType);
             }
