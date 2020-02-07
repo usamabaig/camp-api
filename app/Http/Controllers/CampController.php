@@ -41,7 +41,7 @@ class CampController extends Controller
         $camp_id = $this->createOrUpdateCamp($request, null);
 
         $notification = new Notification();
-        $notification->notification = 'Camp approved successfully';
+        $notification->notification = 'Camp created successfully';
         $notification->user_id = $request->campUserID;
         $notification->camp_id = $camp_id->id;
         $notification->save();

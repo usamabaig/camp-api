@@ -197,4 +197,21 @@ class ApiController extends Controller
     {
         return response()->json(District::get());
     }
+
+    public function getUnreadNotifications($user_id)
+    {
+        $notifications = Notification::where([
+          ['user_id', '=', $user_id],
+          ['is_read', '=', 0]
+        ])->count();
+
+        return response()->json($notifications);
+    }
+
+    public function markNotificationAsRead($user_id)
+    {
+        Notification::where('user_id', $user_id)->update(['is_read' => 1]);
+
+        return response()->json(['success' => 'Notifications marked as read.']);
+    }
 }

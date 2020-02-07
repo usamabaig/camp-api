@@ -37,6 +37,9 @@ Route::get('close/camp/{camp_id}', 'ApiController@closeCamp');
 Route::get('get/district/{district_id}', 'ApiController@getDistrict');
 Route::get('get/territory/{territory_id}', 'ApiController@getTerritory');
 
+Route::get('get/notifications/unread/{user_id}', 'ApiController@getUnreadNotifications');
+Route::get('notification/mark/read/{user_id}', 'ApiController@markNotificationAsRead');
+
 Route::post('get/camps/present', 'ReportsController@getPresentCamps');
 Route::post('get/camps/previous', 'ReportsController@getPreviousCamps');
 Route::post('get/users/report', 'ReportsController@getUsers');
