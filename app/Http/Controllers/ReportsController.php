@@ -2,8 +2,10 @@
 namespace App\Http\Controllers;
 
 use App\Camp;
+use App\Patient;
 use App\User;
 use Illuminate\Http\Request;
+use DB;
 
 class ReportsController extends Controller
 {
@@ -61,5 +63,32 @@ class ReportsController extends Controller
         })->get();
 
         return response()->json($users);
+    }
+
+    public function getDoctors(Request $request)
+    {
+        $doctors = DB::table('camps')
+            ->select(DB::raw('count(*) as camp_count'), 'dr_id', 'dr_name', 'dr_phone_no')
+            ->where(function ($query) use ($request) {
+                if (isset($request->doctorSearch)){
+                    $query->where('dr_name', 'like', '%'.$request->doctorSearch.'%')
+                        ->orWhere('dr_id', 'like', '%'.$request->doctorSearch.'%');
+                }
+            })
+            ->groupBy('dr_id', 'dr_name', 'dr_phone_no')
+            ->get();
+
+        return response()->json($doctors);
+    }
+
+    public function getPatients(Request $request)
+    {
+        $patients = Patient::with('camps')->where(function ($query) use ($request) {
+            if (isset($request->campType)){
+                $query->where('camp_type', '=', $request->campType);
+            }
+        })->get();
+
+        return response()->json($patients);
     }
 }

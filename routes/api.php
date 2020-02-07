@@ -40,3 +40,6 @@ Route::get('get/territory/{territory_id}', 'ApiController@getTerritory');
 Route::post('get/camps/present', 'ReportsController@getPresentCamps');
 Route::post('get/camps/previous', 'ReportsController@getPreviousCamps');
 Route::post('get/users/report', 'ReportsController@getUsers');
+
+Route::post('get/doctors/report', 'ReportsController@getDoctors');
+Route::post('get/patients/report', 'ReportsController@getPatients');
