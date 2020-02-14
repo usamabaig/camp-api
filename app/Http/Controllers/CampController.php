@@ -16,7 +16,9 @@ class CampController extends Controller
      */
     public function index()
     {
-        $camps = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')->get();
+        $camps = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')
+            ->orderBy('camp_datetime', 'desc')
+            ->get();
 
         return response()->json($camps);
     }
