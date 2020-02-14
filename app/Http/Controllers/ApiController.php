@@ -76,7 +76,7 @@ class ApiController extends Controller
 
         $notification = new Notification();
         $notification->notification = 'Camp approved successfully';
-        $notification->user_id = $user_id;
+        $notification->user_id = $camp->user_id;
         $notification->camp_id = $camp_id;
         $notification->save();
 

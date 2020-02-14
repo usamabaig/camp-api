@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Camp;
 use App\Notification;
+use App\User;
 use Illuminate\Http\Request;
 
 class CampController extends Controller
@@ -40,11 +41,18 @@ class CampController extends Controller
     {
         $camp_id = $this->createOrUpdateCamp($request, null);
 
-        $notification = new Notification();
-        $notification->notification = 'Camp created successfully';
-        $notification->user_id = $request->campUserID;
-        $notification->camp_id = $camp_id->id;
-        $notification->save();
+        $spo_region = User::where('id', $request->campUserID)->value('region');
+        $spo_admin = User::where('region', $spo_region)->whereIn('designation', [1,2,3,4])->get();
+
+        $notifications = [];
+        foreach ($spo_admin as $admin) {
+            $notification = new Notification();
+            $notification->notification = 'Camp created successfully';
+            $notification->user_id = $admin->id;
+            $notification->camp_id = $camp_id->id;
+            $notifications[] = $notification;
+        }
+        Notification::insert($notifications);
 
         return response()->json(['success' => 'Camp Saved Successfully'], 200);
     }
