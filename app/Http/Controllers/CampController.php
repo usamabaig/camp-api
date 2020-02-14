@@ -50,7 +50,7 @@ class CampController extends Controller
             $notification->notification = 'Camp created successfully';
             $notification->user_id = $admin->id;
             $notification->camp_id = $camp_id->id;
-            $notifications[] = $notification;
+            $notifications[] = $notification->toArray();
         }
         Notification::insert($notifications);
 
