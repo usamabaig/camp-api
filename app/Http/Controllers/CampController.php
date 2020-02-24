@@ -122,8 +122,8 @@ class CampController extends Controller
         $camp->lat = $request->campLat;
         $camp->lng = $request->campLang;
         $camp->user_id = $request->campUserID;
-        $camp->is_bp_apparatus = $request->bpApparatus;
-        $camp->is_bs_meter = $request->bloodSugarMeter;
+        $camp->is_bp_apparatus = isset($request->bpApparatus) ? $request->bpApparatus : 0;
+        $camp->is_bs_meter = isset($request->bloodSugarMeter) ? $request->bloodSugarMeter : 0;
         $camp->no_of_strips = $request->strips;
         $camp->no_of_flyers = $request->flyers;
         $camp->no_of_screening_slips = $request->screeingSlips;
