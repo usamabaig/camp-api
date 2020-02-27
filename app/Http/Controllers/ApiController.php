@@ -225,7 +225,7 @@ class ApiController extends Controller
             'password' => $request->oldPassword
         ];
         if(Auth::once($credentials)) {
-            $user->password = Hash::make($request->newPassword);
+            $user->password = Hash::make($request->password);
             $user->save();
 
             $response = ['success' => 'Password reset successfully'];
