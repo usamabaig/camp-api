@@ -10,6 +10,7 @@ use App\Region;
 use App\Role;
 use App\Team;
 use App\Territory;
+use Illuminate\Support\Facades\Hash;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -224,7 +225,7 @@ class ApiController extends Controller
             'password' => $request->oldPassword
         ];
         if(Auth::once($credentials)) {
-            $user->password = \Hash::make($request->newPassword);
+            $user->password = Hash::make($request->newPassword);
             $user->save();
 
             $response = ['success' => 'Password reset successfully'];
