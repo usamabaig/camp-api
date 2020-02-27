@@ -10,6 +10,7 @@ use App\Region;
 use App\Role;
 use App\Team;
 use App\Territory;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -213,5 +214,24 @@ class ApiController extends Controller
         Notification::where('user_id', $user_id)->update(['is_read' => 1]);
 
         return response()->json(['success' => 'Notifications marked as read.']);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $user = User::find($request->userID);
+        $credentials = [
+            'email' => $user->email,
+            'password' => $request->oldPassword
+        ];
+        if(Auth::once($credentials)) {
+            $user->password = \Hash::make($request->newPassword);
+            $user->save();
+
+            $response = ['success' => 'Password reset successfully'];
+        } else {
+            $response = ['error' => 'Some error occurred, Please try again.'];
+        }
+
+        return response()->json($response);
     }
 }
