@@ -42,8 +42,6 @@ class Camp extends Model
 
             return $query->whereIn('user_id', $user_ids);
         }
-        dd($role);
-        return $query->where('votes', '>', 100);
     }
 
     public function user()

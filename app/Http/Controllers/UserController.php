@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::get();
+        $users = User::with('user_territory', 'user_district', 'user_region', 'user_team', 'user_role')->users($_GET['userID'])->get();
 
         return response()->json($users);
     }

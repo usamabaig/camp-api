@@ -41,7 +41,7 @@ Route::get('get/notifications/unread/{user_id}', 'ApiController@getUnreadNotific
 Route::get('notification/mark/read/{user_id}', 'ApiController@markNotificationAsRead');
 
 Route::post('get/camps/present/{user_id}', 'ReportsController@getPresentCamps');
-Route::post('get/users/report', 'ReportsController@getUsers');
+Route::post('get/users/report/{user_id}', 'ReportsController@getUsers');
 
 Route::post('get/doctors/report', 'ReportsController@getDoctors');
 Route::post('get/patients/report', 'ReportsController@getPatients');
