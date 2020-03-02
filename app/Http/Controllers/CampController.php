@@ -44,7 +44,7 @@ class CampController extends Controller
         $camp_id = $this->createOrUpdateCamp($request, null);
 
         $spo_region = User::where('id', $request->campUserID)->value('region');
-        $spo_admin = User::where('region', $spo_region)->whereIn('designation', [1,2,3,4])->get();
+        $spo_admin = User::where('region', $spo_region)->whereIn('designation', [1,2,3,4,5,6,7,8,9,10])->get();
 
         $notifications = [];
         foreach ($spo_admin as $admin) {
