@@ -47,3 +47,7 @@ Route::post('get/doctors/report', 'ReportsController@getDoctors');
 Route::post('get/patients/report', 'ReportsController@getPatients');
 
 Route::post('password/reset', 'ApiController@resetPassword');
+
+Route::post('password/create', 'PasswordResetController@create');
+Route::get('password/find/{token}', 'PasswordResetController@find');
+Route::post('password/reset', 'PasswordResetController@reset');
