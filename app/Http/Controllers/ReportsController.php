@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Response;
 
 class ReportsController extends Controller
 {
@@ -91,5 +92,36 @@ class ReportsController extends Controller
         })->get();
 
         return response()->json($patients);
+    }
+
+    public function export($name, $data_keys, $data_values)
+    {
+        $filename = $name. "report.csv";
+        $handle = fopen($filename, 'w+');
+        fputcsv($handle, $data_keys);
+        if ($name == 'camps') {
+            foreach($data_values as $row) {
+                fputcsv($handle, array(@$row->tasks->name, @$row->tasks->site->site_name, @$row->employee->name, @$row->timer->check_in, @$row->timer->check_out));
+            }
+        } else if ($name == 'users') {
+            foreach($data_values as $row) {
+                fputcsv($handle, array(@$row->tasks->name, @$row->tasks->site->site_name, @$row->employee->name, @$row->timer->check_in, @$row->timer->check_out));
+            }
+        } else if ($name == 'patients') {
+            foreach($data_values as $row) {
+                fputcsv($handle, array(@$row->tasks->name, @$row->tasks->site->site_name, @$row->employee->name, @$row->timer->check_in, @$row->timer->check_out));
+            }
+        } else if ($name == 'doctors') {
+            foreach($data_values as $row) {
+                fputcsv($handle, array(@$row->tasks->name, @$row->tasks->site->site_name, @$row->employee->name, @$row->timer->check_in, @$row->timer->check_out));
+            }
+        }
+        fclose($handle);
+
+        $headers = array(
+            'Content-Type' => 'text/csv',
+        );
+
+        return Response::download($filename, $filename, $headers);//Response::stream($callback, 200, $headers);
     }
 }

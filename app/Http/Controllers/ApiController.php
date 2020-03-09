@@ -6,6 +6,7 @@ use App\Camp;
 use App\District;
 use App\Notification;
 use App\Patient;
+use App\PatientDrug;
 use App\Region;
 use App\Role;
 use App\Team;
@@ -116,7 +117,48 @@ class ApiController extends Controller
         }
         $patient->save();
 
+        $this->addDrugsForPatients($request, $patient->id);
+
         return response()->json(['success' => 'Patient Saved Successfully']);
+    }
+
+    public function addDrugsForPatients(Request $request, $patient_id)
+    {
+        if (isset($request->drugName1) && $request->drugName1 !== '') {
+            $patient_drug = new PatientDrug();
+            $patient_drug->patient_id = $patient_id;
+            $patient_drug->drug_name = $request->drugName1;
+            $patient_drug->is_company_drug = isset($request->isCompanyDrug1) ? $request->isCompanyDrug1 : 0;
+            $patient_drug->save();
+        }
+        if (isset($request->drugName2) && $request->drugName2 !== '') {
+            $patient_drug = new PatientDrug();
+            $patient_drug->patient_id = $patient_id;
+            $patient_drug->drug_name = $request->drugName2;
+            $patient_drug->is_company_drug = isset($request->isCompanyDrug2) ? $request->isCompanyDrug2 : 0;
+            $patient_drug->save();
+        }
+        if (isset($request->drugName3) && $request->drugName3 !== '') {
+            $patient_drug = new PatientDrug();
+            $patient_drug->patient_id = $patient_id;
+            $patient_drug->drug_name = $request->drugName3;
+            $patient_drug->is_company_drug = isset($request->isCompanyDrug3) ? $request->isCompanyDrug3 : 0;
+            $patient_drug->save();
+        }
+        if (isset($request->drugName4) && $request->drugName4 !== '') {
+            $patient_drug = new PatientDrug();
+            $patient_drug->patient_id = $patient_id;
+            $patient_drug->drug_name = $request->drugName4;
+            $patient_drug->is_company_drug = isset($request->isCompanyDrug4) ? $request->isCompanyDrug4 : 0;
+            $patient_drug->save();
+        }
+        if (isset($request->drugName5) && $request->drugName5 !== '') {
+            $patient_drug = new PatientDrug();
+            $patient_drug->patient_id = $patient_id;
+            $patient_drug->drug_name = $request->drugName5;
+            $patient_drug->is_company_drug = isset($request->isCompanyDrug5) ? $request->isCompanyDrug5 : 0;
+            $patient_drug->save();
+        }
     }
 
     public function getApprovedCamps($user_id)
