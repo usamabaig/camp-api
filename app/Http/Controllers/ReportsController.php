@@ -34,7 +34,13 @@ class ReportsController extends Controller
             }
         })->get();
 
-        return response()->json($camp);
+        $data_keys = ['SPO Name', 'Team', 'Region', 'District', 'Territory', 'Camp Type', 'Dr Name', 'Camp Date/Time', 'Camp Status'];
+
+        if (isset($request->action) && $request->action == 'excel') {
+            $this->export('camps', $data_keys, $camp);
+        } else {
+            return response()->json($camp);
+        }
     }
 
     public function getUsers(Request $request, $user_id)
@@ -64,7 +70,13 @@ class ReportsController extends Controller
             }
         })->get();
 
-        return response()->json($users);
+        $data_keys = ['Name', 'Email', 'Employee Code', 'Region'];
+
+        if (isset($request->action) && $request->action == 'excel') {
+            $this->export('users', $data_keys, $users);
+        } else {
+            return response()->json($users);
+        }
     }
 
     public function getDoctors(Request $request)
@@ -80,7 +92,13 @@ class ReportsController extends Controller
             ->groupBy('dr_id', 'dr_name', 'dr_phone_no')
             ->get();
 
-        return response()->json($doctors);
+        $data_keys = ['Doctor Name', 'Doctor Code', 'Doctor Contact'];
+
+        if (isset($request->action) && $request->action == 'excel') {
+            $this->export('doctors', $data_keys, $doctors);
+        } else {
+            return response()->json($doctors);
+        }
     }
 
     public function getPatients(Request $request)
@@ -91,29 +109,43 @@ class ReportsController extends Controller
             }
         })->get();
 
-        return response()->json($patients);
+        $data_keys = ['Patient Name', 'Patient Contact', 'Gender'];
+
+        if (isset($request->action) && $request->action == 'excel') {
+            $this->export('patients', $data_keys, $patients);
+        } else {
+            return response()->json($patients);
+        }
     }
 
     public function export($name, $data_keys, $data_values)
     {
-        $filename = $name. "report.csv";
+        $filename = $name. "-report-".time().".csv";
         $handle = fopen($filename, 'w+');
         fputcsv($handle, $data_keys);
         if ($name == 'camps') {
             foreach($data_values as $row) {
-                fputcsv($handle, array(@$row->tasks->name, @$row->tasks->site->site_name, @$row->employee->name, @$row->timer->check_in, @$row->timer->check_out));
+                if ($row->camp_type == 1) {
+                    $camp_type = 'Cardio';
+                } else if ($row->camp_type == 2) {
+                    $camp_type = 'Diabetic';
+                } else if ($row->camp_type == 3) {
+                    $camp_type = 'Cardio/Diabetic';
+                }
+                $camp_status = $row->camp_status == 0 ? 'Pending' : 'Approved';
+                fputcsv($handle, [@$row->user->name, @$row->user->user_team->team_name, @$row->user->user_region->region_name, @$row->user->user_district->district_name, @$row->user->user_territory->territory_name, $camp_type, $row->dr_name, $row->camp_datetime, $camp_status ]);
             }
         } else if ($name == 'users') {
             foreach($data_values as $row) {
-                fputcsv($handle, array(@$row->tasks->name, @$row->tasks->site->site_name, @$row->employee->name, @$row->timer->check_in, @$row->timer->check_out));
+                fputcsv($handle, [@$row->name, @$row->email, @$row->employee_code, @$row->user_region->region_name]);
             }
         } else if ($name == 'patients') {
             foreach($data_values as $row) {
-                fputcsv($handle, array(@$row->tasks->name, @$row->tasks->site->site_name, @$row->employee->name, @$row->timer->check_in, @$row->timer->check_out));
+                fputcsv($handle, [@$row->patient_name, @$row->phone_no, @$row->gender]);
             }
         } else if ($name == 'doctors') {
             foreach($data_values as $row) {
-                fputcsv($handle, array(@$row->tasks->name, @$row->tasks->site->site_name, @$row->employee->name, @$row->timer->check_in, @$row->timer->check_out));
+                fputcsv($handle, [@$row->dr_name, @$row->dr_id, @$row->dr_phone_no]);
             }
         }
         fclose($handle);
@@ -122,6 +154,6 @@ class ReportsController extends Controller
             'Content-Type' => 'text/csv',
         );
 
-        return Response::download($filename, $filename, $headers);//Response::stream($callback, 200, $headers);
+        return Response::download($filename, $filename, $headers);
     }
 }
