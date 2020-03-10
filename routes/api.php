@@ -37,6 +37,7 @@ Route::post('start/camp', 'ApiController@startCamp');
 Route::get('close/camp/{camp_id}', 'ApiController@closeCamp');
 Route::get('get/district/{district_id}', 'ApiController@getDistrict');
 Route::get('get/territory/{territory_id}', 'ApiController@getTerritory');
+Route::get('patient/{patient_id}', 'ApiController@getPatient');
 
 Route::get('get/notifications/unread/{user_id}', 'ApiController@getUnreadNotifications');
 Route::get('notification/mark/read/{user_id}', 'ApiController@markNotificationAsRead');

@@ -277,4 +277,11 @@ class ApiController extends Controller
 
         return response()->json($response);
     }
+
+    public function getPatient($patient_id)
+    {
+        $patient = Patient::where('id', $patient_id)->get();
+
+        return response()->json($patient);
+    }
 }
