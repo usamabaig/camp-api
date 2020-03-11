@@ -156,6 +156,6 @@ class ReportsController extends Controller
 
         Response::download($filename, $filename, $headers);
 
-        header(url().'/'.$filename);
+        return \URL::to('/').'/'.$filename;
     }
 }
