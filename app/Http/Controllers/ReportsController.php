@@ -154,6 +154,8 @@ class ReportsController extends Controller
             'Content-Type' => 'text/csv',
         );
 
-        return Response::download($filename, $filename, $headers);
+        Response::download($filename, $filename, $headers);
+
+        header(url().'/'.$filename);
     }
 }
