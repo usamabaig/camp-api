@@ -13,9 +13,9 @@ class ReportsController extends Controller
 {
     public function getPresentCamps(Request $request, $user_id)
     {
-//        $to_date = isset($request->endDate) ? date('Y-m-d H:i:s', strtotime($request->endDate)) : date('Y-m-d H:i:s',strtotime("-1 days"));
-//        $from_date = isset($request->startDate) ? date('Y-m-d H:i:s', strtotime($request->startDate)) : date('Y-m-d H:i:s',strtotime("-1 year"));
-//        $date = [$from_date, $to_date];
+        $to_date = isset($request->endDate) ? date('Y-m-d H:i:s', strtotime($request->endDate)) : date('Y-m-d H:i:s',strtotime("-1 days"));
+        $from_date = isset($request->startDate) ? date('Y-m-d H:i:s', strtotime($request->startDate)) : date('Y-m-d H:i:s',strtotime("-1 year"));
+        $date = [$from_date, $to_date];
         $camp = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')->camps($user_id)->where(function ($query) use ($request) {
             if (isset($request->doctorName)){
                 $query->where('dr_name', 'like', '%'.$request->doctorName.'%');
@@ -32,7 +32,7 @@ class ReportsController extends Controller
             if (isset($request->campStatus)){
                 $query->where('camp_status', '=', $request->campStatus);
             }
-        })->get();
+        })->whereBetween()->get();
 
         $data_keys = ['SPO Name', 'Team', 'Region', 'District', 'Territory', 'Camp Type', 'Dr Name', 'Camp Date/Time', 'Camp Status'];
 
@@ -156,6 +156,6 @@ class ReportsController extends Controller
 
         Response::download($filename, $filename, $headers);
 
-        return \URL::to('/').'/'.$filename;
+        return response()->json(\URL::to('/').'/'.$filename);
     }
 }
