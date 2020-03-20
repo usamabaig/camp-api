@@ -32,12 +32,12 @@ class ReportsController extends Controller
             if (isset($request->campStatus)){
                 $query->where('camp_status', '=', $request->campStatus);
             }
-        })->whereBetween()->get();
+        })->get();
 
         $data_keys = ['SPO Name', 'Team', 'Region', 'District', 'Territory', 'Camp Type', 'Dr Name', 'Camp Date/Time', 'Camp Status'];
 
         if (isset($request->action) && $request->action == 'excel') {
-            $this->export('camps', $data_keys, $camp);
+            return $this->export('camps', $data_keys, $camp);
         } else {
             return response()->json($camp);
         }
@@ -73,7 +73,7 @@ class ReportsController extends Controller
         $data_keys = ['Name', 'Email', 'Employee Code', 'Region'];
 
         if (isset($request->action) && $request->action == 'excel') {
-            $this->export('users', $data_keys, $users);
+            return $this->export('users', $data_keys, $users);
         } else {
             return response()->json($users);
         }
@@ -95,7 +95,7 @@ class ReportsController extends Controller
         $data_keys = ['Doctor Name', 'Doctor Code', 'Doctor Contact'];
 
         if (isset($request->action) && $request->action == 'excel') {
-            $this->export('doctors', $data_keys, $doctors);
+            return $this->export('doctors', $data_keys, $doctors);
         } else {
             return response()->json($doctors);
         }
@@ -112,7 +112,7 @@ class ReportsController extends Controller
         $data_keys = ['Patient Name', 'Patient Contact', 'Gender'];
 
         if (isset($request->action) && $request->action == 'excel') {
-            $this->export('patients', $data_keys, $patients);
+            return $this->export('patients', $data_keys, $patients);
         } else {
             return response()->json($patients);
         }
