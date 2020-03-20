@@ -52,4 +52,4 @@ Route::post('password/reset', 'ApiController@resetPassword');
 
 Route::post('password/create', 'PasswordResetController@create');
 Route::get('password/find/{token}', 'PasswordResetController@find');
-Route::post('password/reset', 'PasswordResetController@reset');
+Route::post('password/forget/reset', 'PasswordResetController@reset');
