@@ -434,6 +434,7 @@ class ComposerStaticInitfc76381703f7a1553a2b0d061c7439d9
         'App\\Notifications\\PasswordResetSuccess' => __DIR__ . '/../..' . '/app/Notifications/PasswordResetSuccess.php',
         'App\\PasswordReset' => __DIR__ . '/../..' . '/app/PasswordReset.php',
         'App\\Patient' => __DIR__ . '/../..' . '/app/Patient.php',
+        'App\\PatientDrug' => __DIR__ . '/../..' . '/app/PatientDrug.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',

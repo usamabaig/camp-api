@@ -35,6 +35,7 @@ return array(
     'App\\Notifications\\PasswordResetSuccess' => $baseDir . '/app/Notifications/PasswordResetSuccess.php',
     'App\\PasswordReset' => $baseDir . '/app/PasswordReset.php',
     'App\\Patient' => $baseDir . '/app/Patient.php',
+    'App\\PatientDrug' => $baseDir . '/app/PatientDrug.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',
     'App\\Providers\\BroadcastServiceProvider' => $baseDir . '/app/Providers/BroadcastServiceProvider.php',
