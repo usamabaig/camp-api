@@ -13,18 +13,22 @@ class ReportsController extends Controller
 {
     public function getPresentCamps(Request $request, $user_id)
     {
-        if ($request->campReportType == 'previous') {
+        if ($request->campReportType == 'previous' || $request->campDuration == 'previous') {
             $from_date = isset($request->startDate) ? date('Y-m-d H:i:s', strtotime($request->startDate)) : date('Y-m-d 00:00:00',strtotime("-1 days"));
             $to_date = isset($request->endDate) ? date('Y-m-d H:i:s', strtotime($request->endDate)) : date('Y-m-d 23:59:59',strtotime("-1 year"));
             $date = [$to_date, $from_date];
-        } else if ($request->campReportType == 'future') {
+        } else if ($request->campReportType == 'future' || $request->campDuration == 'future') {
             $from_date = isset($request->startDate) ? date('Y-m-d H:i:s', strtotime($request->startDate)) : date('Y-m-d 00:00:00',strtotime("-1 days"));
             $to_date = isset($request->endDate) ? date('Y-m-d H:i:s', strtotime($request->endDate)) : date('Y-m-d 23:59:59',strtotime("+1 year"));
             $date = [$from_date, $to_date];
-        } else {
-            $to_date = date('Y-m-d 00:00:00');
-            $from_date = date('Y-m-d 23:59:59');
+        } else if ($request->campReportType == 'present'  || $request->campDuration == 'present') {
+            $from_date = date('Y-m-d 00:00:00');
+            $to_date = date('Y-m-d 23:59:59');
             $date = [$from_date, $to_date];
+        } else {
+            $start_date = Camp::select('created_at')->orderBy('created_at', 'asc')->first();
+            $end_date = Camp::select('created_at')->orderBy('created_at', 'desc')->first();
+            $date = [$start_date->created_at->format('Y-m-d H:i:s'), $end_date->created_at->format('Y-m-d H:i:s')];
         }
         $camp = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')->camps($user_id)->where(function ($query) use ($request) {
             if (isset($request->doctorName)){
