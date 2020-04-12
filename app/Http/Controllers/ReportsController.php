@@ -28,7 +28,7 @@ class ReportsController extends Controller
         } else {
             $start_date = Camp::select('created_at')->orderBy('created_at', 'asc')->first();
             $end_date = Camp::select('created_at')->orderBy('created_at', 'desc')->first();
-            $date = [$start_date->created_at->format('Y-m-d H:i:s'), $end_date->created_at->format('Y-m-d H:i:s')];
+            $date = [$start_date->created_at->format('Y-m-d 00:00:00'), $end_date->created_at->format('Y-m-d 23:59:59')];
         }
         $camp = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')->camps($user_id)->where(function ($query) use ($request) {
             if (isset($request->doctorName)){
