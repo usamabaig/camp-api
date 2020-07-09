@@ -36,7 +36,7 @@ class ApiController extends Controller
 
     public function getRoles()
     {
-        $roles = Role::get();
+        $roles = Role::orderBy('id', 'ASC')->get();
 
         return response()->json($roles);
     }
