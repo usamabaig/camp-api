@@ -50,7 +50,7 @@ class ApiController extends Controller
 
     public function getRegions()
     {
-        $regions = Region::get();
+        $regions = Region::orderBy('id', 'ASC')->get();
 
         return response()->json($regions);
     }
