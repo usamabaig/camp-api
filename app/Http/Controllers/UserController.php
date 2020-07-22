@@ -96,7 +96,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        if ($user->cnic !== $request->cnic){
+        if (!isset($request->cnic) || $user->cnic !== $request->cnic){
             $request->validate([
                 'cnic' => 'required|unique:users,cnic',
             ]);
