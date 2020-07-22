@@ -42,7 +42,7 @@ class CampController extends Controller
     public function store(Request $request)
     {
         $camp_id = $this->createOrUpdateCamp($request, null);
-
+die();
         $spo_region = User::where('id', $request->campUserID)->value('region');
         $spo_admin = User::where('region', $spo_region)->whereIn('designation', [1,2,3,4,5,6,7,8,9,10])->get();
 
@@ -121,13 +121,33 @@ class CampController extends Controller
         $camp->address = $request->campAddress;
         $camp->lat = $request->campLat;
         $camp->lng = $request->campLang;
-        $camp->user_id = $request->campUserID;
+        if (!isset($id)) {
+            $camp->user_id = $request->campUserID;
+        }
         $camp->is_bp_apparatus = isset($request->bpApparatus) ? $request->bpApparatus : 0;
         $camp->is_bs_meter = isset($request->bloodSugarMeter) ? $request->bloodSugarMeter : 0;
-        $camp->no_of_strips = $request->strips;
-        $camp->no_of_flyers = $request->flyers;
-        $camp->no_of_screening_slips = $request->screeingSlips;
+        $camp->no_of_strips = isset($request->strips) ? $request->strips : 0;
+        $camp->no_of_flyers = isset($request->flyers) ? $request->flyers : 0;
+        $camp->no_of_screening_slips = isset($request->screeingSlips) ? $request->screeingSlips : 0;
         $camp->save();
+
+        if ($id !== null) {
+            $user = User::find($request->campUserID);
+
+            if (in_array($user->designation, [4, 5])) {
+                $bum_user = User::where([['team', '=', $user->team], ['designation', '=', '3']])->pluck('email')->toArray();
+                if (!empty($bum_user)) {
+                    $camp_url = config('mail.ANGULAR_APP_URL') . 'camps/viewEditCamp/' . $camp->id;
+                    $html = 'Dear Manager' . '<br><br>' . 'Following camp information has been changed by one of the Product Managers. You can verify it by clicking on the following link. ' . '<br><br>' . '<a href="'.$camp_url.'">' . 'Updated Camp' . '</a>' . '<br><br>' . 'Thanks';
+
+                    \Mail::send(array(), array(), function ($message) use ($html, $bum_user) {
+                        $message->to($bum_user)
+                            ->subject('Camp Edit Notification')
+                            ->setBody($html, 'text/html');
+                    });
+                }
+            }
+        }
 
         return $camp;
     }

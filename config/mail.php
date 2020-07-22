@@ -18,6 +18,8 @@ return [
 
     'driver' => env('MAIL_DRIVER', 'smtp'),
 
+    'ANGULAR_APP_URL' => env('ANGULAR_APP_URL'),
+
     /*
     |--------------------------------------------------------------------------
     | SMTP Host Address
