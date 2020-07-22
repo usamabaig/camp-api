@@ -42,7 +42,7 @@ class CampController extends Controller
     public function store(Request $request)
     {
         $camp_id = $this->createOrUpdateCamp($request, null);
-die();
+
         $spo_region = User::where('id', $request->campUserID)->value('region');
         $spo_admin = User::where('region', $spo_region)->whereIn('designation', [1,2,3,4,5,6,7,8,9,10])->get();
 
