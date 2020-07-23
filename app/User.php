@@ -87,19 +87,19 @@ class User extends Authenticatable
         } else if(in_array($role->designation, $role_level_1)) {
             $user_ids = User::where('team', $role->team)->pluck('id')->toArray();
 
-            return $query->whereIn('id', $user_ids);
+            return $query->whereIn('id', $user_ids)->whereNotIn('designation', $role_level_0);
         } else if(in_array($role->designation, $role_level_2)) {
             $user_ids = User::where('region', $role->region)->pluck('id')->toArray();
 
-            return $query->whereIn('id', $user_ids);
+            return $query->whereIn('id', $user_ids)->whereNotIn('designation', array_merge($role_level_1, $role_level_0));
         } else if(in_array($role->designation, $role_level_3)) {
             $user_ids = User::where('district', $role->district)->pluck('id')->toArray();
 
-            return $query->whereIn('id', $user_ids);
+            return $query->whereIn('id', $user_ids)->whereNotIn('designation', array_merge($role_level_2, $role_level_1, $role_level_0));
         } else if(in_array($role->designation, $role_level_4)) {
             $user_ids = User::where('territory', $role->territory)->pluck('id')->toArray();
 
-            return $query->whereIn('id', $user_ids);
+            return $query->whereIn('id', $user_ids)->whereNotIn('designation', array_merge($role_level_3, $role_level_2, $role_level_1, $role_level_0));
         }
     }
 }
