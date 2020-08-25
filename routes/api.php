@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login', 'ApiController@login');
 Route::get('roles', 'ApiController@getRoles');
 Route::get('teams', 'ApiController@getTeams');
-Route::get('regions', 'ApiController@getRegions');
+Route::get('regions/{team_id}', 'ApiController@getRegions');
 Route::get('districts/{region_id}', 'ApiController@getDistricts');
 Route::get('territories/{district_id}', 'ApiController@getTerritories');
 Route::get('camp/approval/{camp_id}/{user_id}', 'ApiController@approveCamp');

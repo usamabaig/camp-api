@@ -48,9 +48,9 @@ class ApiController extends Controller
         return response()->json($teams);
     }
 
-    public function getRegions()
+    public function getRegions($team_id)
     {
-        $regions = Region::orderBy('id', 'ASC')->get();
+        $regions = Region::orderBy('id', 'ASC')->where('team_id', $team_id)->get();
 
         return response()->json($regions);
     }
