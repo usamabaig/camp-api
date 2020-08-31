@@ -72,8 +72,8 @@ class ReportsController extends Controller
                 $query->where('region', '=', $request->region);
             }
         })->where(function ($query) use ($request) {
-            if (isset($request->team)){
-                $query->where('team', '=', $request->team);
+            if (isset($request->teams)){
+                $query->where('team', '=', $request->teams);
             }
         })->where(function ($query) use ($request) {
             if (isset($request->userName)){
@@ -82,7 +82,7 @@ class ReportsController extends Controller
                     ->orWhere('email', 'like', '%'.$request->userName.'%')
                     ->orWhere('employee_code', 'like', '%'.$request->userName.'%');
             }
-        })->get();
+        })->orderBy('name', 'asc')->orderBy('employee_code', 'asc')->get();
 
         $data_keys = ['Name', 'Email', 'Employee Code', 'Region'];
 
