@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Team;
 use App\User;
+use App\UserTeam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('user_territory', 'user_district', 'user_region', 'user_team', 'user_role')->users($_GET['userID'])->orderBy('name', 'asc')->orderBy('employee_code', 'asc')->get();
+        $users = User::with('user_territory', 'user_district', 'user_region', 'user_team', 'multiple_teams', 'user_role')->users($_GET['userID'])->orderBy('name', 'asc')->orderBy('employee_code', 'asc')->get();
 
         return response()->json($users);
     }
@@ -50,14 +52,26 @@ class UserController extends Controller
         $user->cnic = $request->cnic;
         $user->designation = $request->designation;
         $user->password = Hash::make('12345');
+        $user->is_multiple_teams = is_array($request->team) ? 1 : 0;
         $user->employee_code = $request->employeeCode;
         $user->mobile_no = $request->mobileNumber;
         $user->email = $request->email;
         $user->territory = $request->territory;
         $user->district = $request->district;
         $user->region = $request->region;
-        $user->team = $request->team;
+        $user->team = is_array($request->team) ? 0 : $request->team;
         $user->save();
+
+        if (is_array($request->team)) {
+            $user_teams = [];
+            foreach ($request->team as $team_id) {
+                $team = new UserTeam();
+                $team->user = $user->id;
+                $team->team = $team_id;
+                $user_teams[] = $team->toArray();
+            }
+            UserTeam::insert($user_teams);
+        }
 
         return response()->json(['success' => 'User Saved Successfully'], 200);
     }
@@ -120,13 +134,23 @@ class UserController extends Controller
         $user->cnic = $request->cnic;
         $user->designation = $request->designation;
         $user->employee_code = $request->employeeCode;
+        $user->is_multiple_teams = is_array($request->team) ? 1 : 0;
         $user->mobile_no = $request->mobileNumber;
         $user->email = $request->email;
         $user->territory = $request->territory;
         $user->district = $request->district;
         $user->region = $request->region;
-        $user->team = $request->team;
+        $user->team = is_array($request->team) ? 0 : $request->team;
         $user->save();
+
+        if (is_array($request->team)) {
+            foreach ($request->team as $team_id) {
+                UserTeam::firstOrCreate(
+                    ['user' => $user->id],
+                    ['user' => $user->id, 'team' => $team_id]
+                );
+            }
+        }
 
         return response()->json(['success' => 'User Saved Successfully'], 200);
     }

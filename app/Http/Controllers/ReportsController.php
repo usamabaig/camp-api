@@ -59,7 +59,7 @@ class ReportsController extends Controller
 
     public function getUsers(Request $request, $user_id)
     {
-        $users = User::with('user_territory', 'user_district', 'user_region', 'user_team')->users($user_id)->where(function ($query) use ($request) {
+        $users = User::with('user_territory', 'user_district', 'user_region', 'user_team', 'multiple_teams')->users($user_id)->where(function ($query) use ($request) {
             if (isset($request->territory)){
                 $query->where('territory', '=', $request->territory);
             }

@@ -65,6 +65,11 @@ class User extends Authenticatable
         return $this->hasOne('App\Role', 'id', 'designation');
     }
 
+    public function multiple_teams()
+    {
+        return $this->belongsToMany('App\Team');
+    }
+
     /**
      * Scope a query to only include popular users.
      *
