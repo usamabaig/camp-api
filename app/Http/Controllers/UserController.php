@@ -47,27 +47,33 @@ class UserController extends Controller
             'mobileNumber' => 'required|unique:users,mobile_no',
         ]);
 
+        if (is_array($request->team) && count($request->team) > 1) {
+            $team = 0;
+        } else {
+            $team = $request->team[0];
+        }
+
         $user = new User();
         $user->name = $request->name;
         $user->cnic = $request->cnic;
         $user->designation = $request->designation;
         $user->password = Hash::make('12345');
-        $user->is_multiple_teams = is_array($request->team) ? 1 : 0;
+        $user->is_multiple_teams = $request->isMultiple;
         $user->employee_code = $request->employeeCode;
         $user->mobile_no = $request->mobileNumber;
         $user->email = $request->email;
         $user->territory = $request->territory;
         $user->district = $request->district;
         $user->region = $request->region;
-        $user->team = is_array($request->team) ? 0 : $request->team;
+        $user->team = $team;
         $user->save();
 
-        if (is_array($request->team)) {
+        if (is_array($request->team) && count($request->team) > 1) {
             $user_teams = [];
             foreach ($request->team as $team_id) {
                 $team = new UserTeam();
-                $team->user = $user->id;
-                $team->team = $team_id;
+                $team->user_id = $user->id;
+                $team->team_id = $team_id;
                 $user_teams[] = $team->toArray();
             }
             UserTeam::insert($user_teams);
