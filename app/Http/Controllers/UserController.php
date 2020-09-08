@@ -90,7 +90,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::with('user_territory', 'user_district', 'user_region', 'user_team', 'user_role')->where('id', $id)->first();
+        $user = User::with('user_territory', 'user_district', 'user_region', 'user_team', 'multiple_teams', 'user_role')->where('id', $id)->first();
 
         return response()->json($user);
     }
