@@ -136,24 +136,29 @@ class UserController extends Controller
                 'email' => 'required|unique:users',
             ]);
         }
+        if (is_array($request->team) && count($request->team) > 1) {
+            $team = 0;
+        } else {
+            $team = $request->team[0];
+        }
         $user->name = $request->name;
         $user->cnic = $request->cnic;
         $user->designation = $request->designation;
         $user->employee_code = $request->employeeCode;
-        $user->is_multiple_teams = is_array($request->team) ? 1 : 0;
+        $user->is_multiple_teams = $request->isMultiple;
         $user->mobile_no = $request->mobileNumber;
         $user->email = $request->email;
         $user->territory = $request->territory;
         $user->district = $request->district;
         $user->region = $request->region;
-        $user->team = is_array($request->team) ? 0 : $request->team;
+        $user->team = $team;
         $user->save();
 
         if (is_array($request->team)) {
             foreach ($request->team as $team_id) {
                 UserTeam::firstOrCreate(
-                    ['user' => $user->id],
-                    ['user' => $user->id, 'team' => $team_id]
+                    ['user_id' => $user->id],
+                    ['user_id' => $user->id, 'team_id' => $team_id]
                 );
             }
         }
