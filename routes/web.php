@@ -18,3 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/user/deleted', 'HomeController@viewDeletedUsers')->name('user.deleted');
+Route::get('/user/restore/{id}', 'HomeController@restoreUser')->name('user.restore');
+Route::get('/user/delete/permanent/{id}', 'HomeController@hardDeleteUser')->name('user.permanent.delete');

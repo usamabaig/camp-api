@@ -3,18 +3,17 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-4">
             <div class="card">
-                <div class="card-header">Dashboard</div>
-
+                <div class="card-header">Deleted Users</div>
                 <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
                         </div>
                     @endif
-
-                    You are logged in!
+                    <p>All deleted users will be listed here to restore or delete permanently</p>
+                    <a class="btn btn-primary btn-sm" href="{{ route('user.deleted') }}">View</a>
                 </div>
             </div>
         </div>
