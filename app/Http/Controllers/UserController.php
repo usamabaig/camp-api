@@ -154,13 +154,16 @@ class UserController extends Controller
         $user->team = $team;
         $user->save();
 
-        if (is_array($request->team)) {
+        if (is_array($request->team) && count($request->team) > 1) {
+            UserTeam::where('user_id', $id)->delete();
+            $user_teams = [];
             foreach ($request->team as $team_id) {
-                UserTeam::firstOrCreate(
-                    ['user_id' => $user->id],
-                    ['user_id' => $user->id, 'team_id' => $team_id]
-                );
+                $team = new UserTeam();
+                $team->user_id = $id;
+                $team->team_id = $team_id;
+                $user_teams[] = $team->toArray();
             }
+            UserTeam::insert($user_teams);
         }
 
         return response()->json(['success' => 'User Saved Successfully'], 200);
