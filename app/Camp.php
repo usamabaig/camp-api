@@ -22,6 +22,9 @@ class Camp extends Model
         $role_level_3 = [10,11]; // District based
         $role_level_4 = [12,13,14]; // Territory based
         $role = User::where('id', $user_id)->first();
+        if ($role->is_multiple_teams == 0) {
+            $query->where('team', $role->team);
+        }
         if (in_array($role->designation, $role_level_0)) {
 
             return $query;
