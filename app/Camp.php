@@ -23,7 +23,8 @@ class Camp extends Model
         $role_level_4 = [12,13,14]; // Territory based
         $role = User::where('id', $user_id)->first();
         if ($role->is_multiple_teams == 0) {
-            $query->where('team', $role->team);
+            $user_ids = User::where('team', $role->team)->pluck('id')->toArray();
+            $query->whereIn('user_id', $user_ids);
         }
         if (in_array($role->designation, $role_level_0)) {
 
