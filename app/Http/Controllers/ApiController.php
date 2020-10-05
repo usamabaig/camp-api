@@ -73,7 +73,7 @@ class ApiController extends Controller
     {
         $camp = Camp::find($camp_id);
         $camp->is_approved = 1;
-        if ($_GET['datetime'] != "undefined") {
+        if (isset($_GET['datetime']) && $_GET['datetime'] != "undefined") {
             $datetime = explode("GMT", $_GET['datetime']);
             $camp->camp_datetime = date("Y-m-d H:i:s", strtotime($datetime[0]));
         }
