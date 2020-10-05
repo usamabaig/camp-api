@@ -26,9 +26,7 @@ class ReportsController extends Controller
             $to_date = date('Y-m-d 23:59:59');
             $date = [$from_date, $to_date];
         } else {
-            $start_date = Camp::select('created_at')->orderBy('created_at', 'asc')->first();
-            $end_date = Camp::select('created_at')->orderBy('created_at', 'desc')->first();
-            $date = [$start_date->created_at->format('Y-m-d 00:00:00'), $end_date->created_at->format('Y-m-d 23:59:59')];
+            $date = [];
         }
         $camp = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')->camps($user_id)->where(function ($query) use ($request) {
             if (isset($request->doctorName)){
@@ -46,8 +44,11 @@ class ReportsController extends Controller
             if (isset($request->campStatus)){
                 $query->where('camp_status', '=', $request->campStatus);
             }
-        })->whereBetween('camp_datetime', $date)->get();
-
+        })->where(function ($query) use ($date) {
+            if ($date != []){
+                $query->whereBetween('camp_datetime', $date);
+            }
+        })->orderBy('camp_datetime', 'desc')->get();
         $data_keys = ['SPO Name', 'Team', 'Region', 'District', 'Territory', 'Camp Type', 'Dr Name', 'Camp Date/Time', 'Camp Status'];
 
         if (isset($request->action) && $request->action == 'excel') {
