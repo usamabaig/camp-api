@@ -48,6 +48,13 @@ class ReportsController extends Controller
             if ($date != []){
                 $query->whereBetween('camp_datetime', $date);
             }
+        })->whereHas('user', function (Builder $query) use ($request) {
+            if (isset($request->region)){
+                $query->where('region', '=', $request->region);
+            }
+            if (isset($request->district)){
+                $query->where('district', '=', $request->district);
+            }
         })->orderBy('camp_datetime', 'desc')->get();
         $data_keys = ['SPO Name', 'Team', 'Region', 'District', 'Territory', 'Camp Type', 'Dr Name', 'Camp Date/Time', 'Camp Status'];
 
