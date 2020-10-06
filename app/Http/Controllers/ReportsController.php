@@ -28,11 +28,8 @@ class ReportsController extends Controller
         } else {
             $date = [];
         }
-        $camp = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')->camps($user_id)->where(function ($query) use ($request) {
-            if (isset($request->doctorName)){
-                $query->where('dr_name', 'like', '%'.$request->doctorName.'%');
-            }
-        })->where(function ($query) use ($request) {
+        $camp = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')->camps($user_id)
+            ->where(function ($query) use ($request) {
             if (isset($request->campType)){
                 $query->where('camp_type', '=', $request->campType);
             }
@@ -49,12 +46,15 @@ class ReportsController extends Controller
                 $query->whereBetween('camp_datetime', $date);
             }
         })->whereHas('user', function (Builder $query) use ($request) {
-            if (isset($request->region)){
-                $query->where('region', '=', $request->region);
-            }
-            if (isset($request->district)){
-                $query->where('district', '=', $request->district);
-            }
+            $query->when($request->region != "", function ($q) use ($request) {
+                return $q->where('region', '=', $request->region);
+            });
+            $query->when($request->district != "", function ($q) use ($request) {
+                return $q->where('district', '=', $request->district);
+            });
+            $query->when($request->doctorName != "", function ($q) use ($request) {
+                return $q->where('dr_name', 'LIKE', '%'.$request->doctorName.'%')->orWhere('name', 'LIKE', '%'.$request->doctorName.'%');
+            });
         })->orderBy('camp_datetime', 'desc')->get();
         $data_keys = ['SPO Name', 'Team', 'Region', 'District', 'Territory', 'Camp Type', 'Dr Name', 'Camp Date/Time', 'Camp Status'];
 
