@@ -86,14 +86,16 @@ class User extends Authenticatable
         $role_level_3 = [10,11]; // District based
         $role_level_4 = [12,13,14]; // Territory based
         $role = User::where('id', $user_id)->first();
-        $query->where('team', $role->team)->orWhere('is_multiple_teams', "=", 1);
+
         if (in_array($role->designation, $role_level_0)) {
 
             return $query;
         } else if(in_array($role->designation, $role_level_1)) {
             $user_ids = User::where('team', $role->team)->pluck('id')->toArray();
+            $m_user_ids = UserTeam::where('team_id', $role->team)->pluck('user_id')->toArray();
+            $ids = array_filter(array_merge($m_user_ids, $user_ids));
 
-            return $query->whereIn('id', $user_ids)->whereNotIn('designation', $role_level_0);
+            return $query->whereIn('id', $ids)->whereNotIn('designation', $role_level_0);
         } else if(in_array($role->designation, $role_level_2)) {
             $user_ids = User::where('region', $role->region)->pluck('id')->toArray();
 
