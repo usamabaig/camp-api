@@ -82,8 +82,8 @@ class User extends Authenticatable
     {
         $role_level_0 = [1,2]; // can see all data
         $role_level_1 = [3,4,5,6,7]; // Team based
-        $role_level_2 = [8,9]; // Region based
-        $role_level_3 = [10,11]; // District based
+        $role_level_2 = [8,9,15,16]; // Region based
+        $role_level_3 = [10,11,17,18]; // District based
         $role_level_4 = [12,13,14]; // Territory based
         $role = User::where('id', $user_id)->first();
 
@@ -93,17 +93,35 @@ class User extends Authenticatable
         } else if(in_array($role->designation, $role_level_1)) {
             $user_ids = User::where('team', $role->team)->pluck('id')->toArray();
             $m_user_ids = UserTeam::where('team_id', $role->team)->pluck('user_id')->toArray();
-            $ids = array_filter(array_merge($m_user_ids, $user_ids));
+            $ids = array_unique(array_merge($m_user_ids, $user_ids));
 
             return $query->whereIn('id', $ids)->whereNotIn('designation', $role_level_0);
         } else if(in_array($role->designation, $role_level_2)) {
-            $user_ids = User::where('region', $role->region)->pluck('id')->toArray();
+            if ($role->is_multiple_teams == 0) {
+                $user_ids = User::where('region', $role->region)->pluck('id')->toArray();
 
-            return $query->whereIn('id', $user_ids)->whereNotIn('designation', array_merge($role_level_1, $role_level_0));
+                return $query->whereIn('id', $user_ids)->whereNotIn('designation', array_merge($role_level_1, $role_level_0));
+            } else {
+                $team = UserTeam::where('user_id', $role->id)->pluck('team_id')->toArray();
+                $user_ids = User::where('region', $role->region)->whereIn('team', $team)->pluck('id')->toArray();
+                $m_user_ids = UserTeam::whereIn('team_id', $team)->pluck('user_id')->toArray();
+                $all_ids = array_merge($user_ids, array_unique($m_user_ids));
+
+                return $query->whereIn('id', $all_ids)->whereNotIn('designation', array_merge($role_level_1, $role_level_0));
+            }
         } else if(in_array($role->designation, $role_level_3)) {
-            $user_ids = User::where('district', $role->district)->pluck('id')->toArray();
+            if ($role->is_multiple_teams == 0) {
+                $user_ids = User::where('district', $role->district)->pluck('id')->toArray();
 
-            return $query->whereIn('id', $user_ids)->whereNotIn('designation', array_merge($role_level_2, $role_level_1, $role_level_0));
+                return $query->whereIn('id', $user_ids)->whereNotIn('designation', array_merge($role_level_2, $role_level_1, $role_level_0));
+            } else {
+                $team = UserTeam::where('user_id', $role->id)->pluck('team_id')->toArray();
+                $user_ids = User::where('district', $role->district)->whereIn('team', $team)->pluck('id')->toArray();
+                $m_user_ids = UserTeam::whereIn('team_id', $team)->pluck('user_id')->toArray();
+                $all_ids = array_merge($user_ids, array_unique($m_user_ids));
+
+                return $query->whereIn('id', $all_ids)->whereNotIn('designation', array_merge($role_level_1, $role_level_0));
+            }
         } else if(in_array($role->designation, $role_level_4)) {
             $user_ids = User::where('territory', $role->territory)->pluck('id')->toArray();
 

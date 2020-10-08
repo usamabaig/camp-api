@@ -25,6 +25,10 @@ class Camp extends Model
         if ($role->is_multiple_teams == 0) {
             $user_ids = User::where('team', $role->team)->pluck('id')->toArray();
             $query->whereIn('user_id', $user_ids);
+        } else {
+            $team_ids = UserTeam::where('user_id', $role->id)->pluck('team_id')->toArray();
+            $user_ids = User::whereIn('team', $team_ids)->pluck('id')->toArray();
+            $query->whereIn('user_id', $user_ids);
         }
         if (in_array($role->designation, $role_level_0)) {
 
