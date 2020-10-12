@@ -16,7 +16,7 @@ class ReportsController extends Controller
         if ($request->campReportType == 'previous' || $request->campDuration == 'previous') {
             $from_date = isset($request->startDate) ? date('Y-m-d H:i:s', strtotime($request->startDate)) : date('Y-m-d 00:00:00',strtotime("-1 days"));
             $to_date = isset($request->endDate) ? date('Y-m-d H:i:s', strtotime($request->endDate)) : date('Y-m-d 23:59:59',strtotime("-1 year"));
-            $date = [$to_date, $from_date];
+            $date = [$from_date, $to_date];
         } else if ($request->campReportType == 'future' || $request->campDuration == 'future') {
             $from_date = isset($request->startDate) ? date('Y-m-d H:i:s', strtotime($request->startDate)) : date('Y-m-d 00:00:00',strtotime("-1 days"));
             $to_date = isset($request->endDate) ? date('Y-m-d H:i:s', strtotime($request->endDate)) : date('Y-m-d 23:59:59',strtotime("+1 year"));
