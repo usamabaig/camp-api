@@ -13,17 +13,9 @@ class ReportsController extends Controller
 {
     public function getPresentCamps(Request $request, $user_id)
     {
-        if ($request->campReportType == 'previous' || $request->campDuration == 'previous') {
+        if ($request->startDate != '' || $request->endDate != '') {
             $from_date = isset($request->startDate) ? date('Y-m-d H:i:s', strtotime($request->startDate)) : date('Y-m-d 00:00:00',strtotime("-1 days"));
             $to_date = isset($request->endDate) ? date('Y-m-d H:i:s', strtotime($request->endDate)) : date('Y-m-d 23:59:59',strtotime("-1 year"));
-            $date = [$from_date, $to_date];
-        } else if ($request->campReportType == 'future' || $request->campDuration == 'future') {
-            $from_date = isset($request->startDate) ? date('Y-m-d H:i:s', strtotime($request->startDate)) : date('Y-m-d 00:00:00',strtotime("-1 days"));
-            $to_date = isset($request->endDate) ? date('Y-m-d H:i:s', strtotime($request->endDate)) : date('Y-m-d 23:59:59',strtotime("+1 year"));
-            $date = [$from_date, $to_date];
-        } else if ($request->campReportType == 'present'  || $request->campDuration == 'present') {
-            $from_date = date('Y-m-d 00:00:00');
-            $to_date = date('Y-m-d 23:59:59');
             $date = [$from_date, $to_date];
         } else {
             $date = [];
@@ -67,7 +59,7 @@ class ReportsController extends Controller
 
     public function getUsers(Request $request, $user_id)
     {
-        $users = User::with('user_territory', 'user_district', 'user_region', 'user_team', 'multiple_teams')->users($user_id)->where(function ($query) use ($request) {
+        $users = User::with('user_territory', 'user_district', 'user_region', 'user_role', 'user_team', 'multiple_teams')->users($user_id)->where(function ($query) use ($request) {
             if (isset($request->territory)){
                 $query->where('territory', '=', $request->territory);
             }
