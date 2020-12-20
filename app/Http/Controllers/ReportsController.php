@@ -84,7 +84,7 @@ class ReportsController extends Controller
             }
         })->orderBy('name', 'asc')->orderBy('employee_code', 'asc')->get();
 
-        $data_keys = ['Name', 'Email', 'Employee Code', 'Region'];
+        $data_keys = ['Name', 'Email', 'Designation', 'Employee Code', 'Region'];
 
         if (isset($request->action) && $request->action == 'excel') {
             return $this->export('users', $data_keys, $users);
@@ -151,7 +151,7 @@ class ReportsController extends Controller
             }
         } else if ($name == 'users') {
             foreach($data_values as $row) {
-                fputcsv($handle, [@$row->name, @$row->email, @$row->employee_code, @$row->user_region->region_name]);
+                fputcsv($handle, [@$row->name, @$row->email, @$row->user_role == null ? "" : @$row->user_role->role_name, @$row->employee_code, @$row->user_region->region_name]);
             }
         } else if ($name == 'patients') {
             foreach($data_values as $row) {
