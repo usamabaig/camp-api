@@ -76,6 +76,10 @@ class ReportsController extends Controller
                 $query->where('team', '=', $request->teams);
             }
         })->where(function ($query) use ($request) {
+            if (isset($request->is_multiple_teams)){
+                $query->where('is_multiple_teams', '=', $request->is_multiple_teams);
+            }
+        })->where(function ($query) use ($request) {
             if (isset($request->userName)){
                 $query->where('name', 'like', '%'.$request->userName.'%')
                     ->orWhere('cnic', 'like', '%'.$request->userName.'%')
