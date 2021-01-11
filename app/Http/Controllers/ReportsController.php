@@ -121,6 +121,10 @@ class ReportsController extends Controller
             if (isset($request->campType)){
                 $query->where('camp_type', '=', $request->campType);
             }
+            if (isset($request->patient_search)){
+                $query->where('patient_name', 'like', '%'.$request->patient_search.'%')
+                    ->orWhere('phone_no', 'like', '%'.$request->patient_search.'%');
+            }
         })->get();
 
         $data_keys = ['Patient Name', 'Patient Contact', 'Gender'];
