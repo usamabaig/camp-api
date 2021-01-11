@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Hash;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\CclMedicine;
+use App\OtherMedicine;
 
 class ApiController extends Controller
 {
@@ -287,5 +289,17 @@ class ApiController extends Controller
         $patient = Patient::where('id', $patient_id)->get();
 
         return response()->json($patient);
+    }
+
+    public function getCclMedicine() {
+        $ccl_medicine = CclMedicine::all();
+
+        return response()->json(['data' => $ccl_medicine]);
+    }
+
+    public function getOtherMedicine() {
+        $other_medicine = OtherMedicine::all();
+
+        return response()->json(['data' => $other_medicine]);
     }
 }
