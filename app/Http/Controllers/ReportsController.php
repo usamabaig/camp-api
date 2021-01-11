@@ -57,6 +57,85 @@ class ReportsController extends Controller
         }
     }
 
+    public function getCampsSlips(Request $request, $user_id)
+    {
+        if ($request->startDate != '' || $request->endDate != '') {
+            $from_date = isset($request->startDate) ? date('Y-m-d H:i:s', strtotime($request->startDate)) : date('Y-m-d 00:00:00',strtotime("-1 days"));
+            $to_date = isset($request->endDate) ? date('Y-m-d H:i:s', strtotime($request->endDate)) : date('Y-m-d 23:59:59',strtotime("-1 year"));
+            $date = [$from_date, $to_date];
+        } else {
+            $date = [];
+        }
+
+        if(isset($request->filter) && $request->filter == "slips") {
+            // total slips used in completed camps
+            $camp_slips = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')
+                ->camps($user_id)
+                ->where("camp_status", 2)
+                ->where(function ($query) use ($date) {
+                    if ($date != []){
+                        $query->whereBetween('camp_datetime', $date);
+                    }
+                })
+                ->orderBy('camp_datetime', 'desc')
+                ->sum("no_of_screening_slips");
+
+            return response()->json(["total_slips" => $camp_slips]);
+        } else if (isset($request->filter) && $request->filter == "camps") {
+            // total completed camps
+            $camps_ready = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')
+                ->camps($user_id)
+                ->where("camp_status", 0)
+                ->where(function ($query) use ($date) {
+                    if ($date != []){
+                        $query->whereBetween('camp_datetime', $date);
+                    }
+                })
+                ->orderBy('camp_datetime', 'desc')
+                ->count();
+
+            $camps_started = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')
+                ->camps($user_id)
+                ->where("camp_status", 1)
+                ->where(function ($query) use ($date) {
+                    if ($date != []){
+                        $query->whereBetween('camp_datetime', $date);
+                    }
+                })
+                ->orderBy('camp_datetime', 'desc')
+                ->count();
+
+            $camps_completed = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')
+                ->camps($user_id)
+                ->where("camp_status", 2)
+                ->where(function ($query) use ($date) {
+                    if ($date != []){
+                        $query->whereBetween('camp_datetime', $date);
+                    }
+                })
+                ->orderBy('camp_datetime', 'desc')
+                ->count();
+
+            $camps_canceled = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')
+                ->camps($user_id)
+                ->whereNotNull("deleted_at")
+                ->where(function ($query) use ($date) {
+                    if ($date != []){
+                        $query->whereBetween('camp_datetime', $date);
+                    }
+                })
+                ->orderBy('camp_datetime', 'desc')
+                ->count();
+
+            return response()->json([
+                "ready_camps" => $camps_ready,
+                "started_camps" => $camps_started,
+                "completed_camps" => $camps_completed,
+                "canceled_camps" => $camps_canceled,
+            ]);
+        }
+    }
+
     public function getUsers(Request $request, $user_id)
     {
         $users = User::with('user_territory', 'user_district', 'user_region', 'user_role', 'user_team', 'multiple_teams')->users($user_id)->where(function ($query) use ($request) {
@@ -124,6 +203,10 @@ class ReportsController extends Controller
         $patients = Patient::whereHas('camps', function (Builder $query) use ($request) {
             if (isset($request->campType)){
                 $query->where('camp_type', '=', $request->campType);
+            }
+            if (isset($request->patient_search)){
+                $query->where('patient_name', 'like', '%'.$request->patient_search.'%')
+                    ->orWhere('phone_no', 'like', '%'.$request->patient_search.'%');
             }
         })->get();
 
