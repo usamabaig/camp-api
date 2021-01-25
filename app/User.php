@@ -122,7 +122,7 @@ class User extends Authenticatable
                 $user_ids_district = User::where('district', $role->district)->whereIn('id', $m_user_ids)->pluck('id')->toArray();
                 $all_ids = array_merge($user_ids, array_unique($user_ids_district));
 
-                return $query->whereIn('id', $all_ids)->whereNotIn('designation', array_merge($role_level_1, $role_level_0));
+                return $query->whereIn('id', $all_ids)->whereNotNull("district")->whereNotIn('designation', array_merge($role_level_1, $role_level_0));
             }
         } else if(in_array($role->designation, $role_level_4)) {
             $user_ids = User::where('territory', $role->territory)->pluck('id')->toArray();
