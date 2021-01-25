@@ -97,7 +97,7 @@ class User extends Authenticatable
 
             return $query->whereIn('id', $ids)->whereNotIn('designation', $role_level_0);
         } else if(in_array($role->designation, $role_level_2)) {
-            if ($role->is_multiple_teams == 0) {
+            if ($role->is_multiple_teams == 0 || $role->is_multiple_teams == null) {
                 $user_ids = User::where('region', $role->region)->where('team', $role->team)->pluck('id')->toArray();
 
                 return $query->whereIn('id', $user_ids)->whereNotIn('designation', array_merge($role_level_1, $role_level_0));
@@ -111,7 +111,7 @@ class User extends Authenticatable
                 return $query->whereIn('id', $all_ids)->whereNotIn('designation', array_merge($role_level_1, $role_level_0));
             }
         } else if(in_array($role->designation, $role_level_3)) {
-            if ($role->is_multiple_teams == 0) {
+            if ($role->is_multiple_teams == 0 || $role->is_multiple_teams == null) {
                 $user_ids = User::where('district', $role->district)->where('team', $role->team)->pluck('id')->toArray();
 
                 return $query->whereIn('id', $user_ids)->whereNotIn('designation', array_merge($role_level_2, $role_level_1, $role_level_0));

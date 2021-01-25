@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Camp extends Model
 {
+    use SoftDeletes;
+
     /**
      * Scope a query to only include popular users.
      *
@@ -23,7 +26,7 @@ class Camp extends Model
         $role_level_4 = [12,13,14]; // Territory based
         $role = User::where('id', $user_id)->first();
         if(!in_array($role->designation, $role_level_0)) {
-            if ($role->is_multiple_teams == 0) {
+            if ($role->is_multiple_teams == 0 || $role->is_multiple_teams == null) {
                 $user_ids = User::where('team', $role->team)->pluck('id')->toArray();
                 $query->whereIn('user_id', $user_ids);
             } else {
