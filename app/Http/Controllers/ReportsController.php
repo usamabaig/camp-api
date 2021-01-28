@@ -59,74 +59,52 @@ class ReportsController extends Controller
 
     public function getCampsSlips(Request $request, $user_id)
     {
-        if ($request->startDate != '' || $request->endDate != '') {
+        /*if ($request->startDate != '' || $request->endDate != '') {
             $from_date = isset($request->startDate) ? date('Y-m-d H:i:s', strtotime($request->startDate)) : date('Y-m-d 00:00:00',strtotime("-1 days"));
             $to_date = isset($request->endDate) ? date('Y-m-d H:i:s', strtotime($request->endDate)) : date('Y-m-d 23:59:59',strtotime("-1 year"));
             $date = [$from_date, $to_date];
         } else {
             $date = [];
-        }
+        }*/
 
+        $users = User::with('user_territory', 'user_district', 'user_region', 'user_team', 'multiple_teams', 'user_role')->users($user_id)->pluck("id");
         // total slips used in completed camps
-        $camp_slips = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')
-            ->camps($user_id)
+        $camp_slips = DB::table('camps')
+            ->join('users', 'camps.user_id', '=', 'users.id')
+            ->selectRaw("SUM(no_of_strips) as total_slips, users.name")
             ->where("camp_status", 2)
-            ->where(function ($query) use ($date) {
-                if ($date != []){
-                    $query->whereBetween('camp_datetime', $date);
-                }
-            })
-            ->orderBy('camp_datetime', 'desc')
-            ->sum("no_of_strips");
+            ->whereIn("user_id", $users)
+            ->groupBy("user_id")
+            ->get();
 
         // total completed camps
-        $camps_ready = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')
-            ->camps($user_id)
+        $camps_ready = DB::table('camps')
+            ->join('users', 'camps.user_id', '=', 'users.id')
+            ->selectRaw("COUNT(*) as total_ready_camps, users.name")
             ->where("camp_status", 0)
-            ->where(function ($query) use ($date) {
-                if ($date != []){
-                    $query->whereBetween('camp_datetime', $date);
-                }
-            })
-            ->orderBy('camp_datetime', 'desc')
-            ->count();
+            ->where("is_approved", 1)
+            ->whereIn("user_id", $users)
+            ->groupBy("user_id")
+            ->get();
 
-        $camps_started = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')
-            ->camps($user_id)
-            ->where("camp_status", 1)
-            ->where(function ($query) use ($date) {
-                if ($date != []){
-                    $query->whereBetween('camp_datetime', $date);
-                }
-            })
-            ->orderBy('camp_datetime', 'desc')
-            ->count();
-
-        $camps_completed = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')
-            ->camps($user_id)
+        $camps_completed = DB::table('camps')
+            ->join('users', 'camps.user_id', '=', 'users.id')
+            ->selectRaw("COUNT(*) as total_completed_camps, users.name")
             ->where("camp_status", 2)
-            ->where(function ($query) use ($date) {
-                if ($date != []){
-                    $query->whereBetween('camp_datetime', $date);
-                }
-            })
-            ->orderBy('camp_datetime', 'desc')
-            ->count();
+            ->whereIn("user_id", $users)
+            ->groupBy("user_id")
+            ->get();
 
-        $camps_canceled = Camp::with('user', 'user.user_territory', 'user.user_district', 'user.user_region', 'user.user_team')
-            ->camps($user_id)
+        $camps_canceled = DB::table('camps')
+            ->join('users', 'camps.user_id', '=', 'users.id')
+            ->selectRaw("COUNT(*) as total_canceled_camps, users.name")
             ->whereNotNull("deleted_at")
-            ->where(function ($query) use ($date) {
-                if ($date != []){
-                    $query->whereBetween('camp_datetime', $date);
-                }
-            })
-            ->orderBy('camp_datetime', 'desc')
-            ->count();
+            ->whereIn("user_id", $users)
+            ->groupBy("user_id")
+            ->get();
 
         return response()->json([
             "ready_camps" => $camps_ready,
-            "started_camps" => $camps_started,
             "completed_camps" => $camps_completed,
             "canceled_camps" => $camps_canceled,
             "total_slips" => $camp_slips
