@@ -108,34 +108,42 @@ class ReportsController extends Controller
             ->groupBy("user_id")
             ->get();
         $array = [];
+        $i=0;
         foreach ($user_names as $key=>$name) {
+            $j=0;
             foreach ($camps_ready as $ready) {
                 if ($ready->name == $name) {
-                    $array[$key]["name"] = $name;
-                    isset($array[$key]["total_ready_camps"]) ? $array[$key]["total_ready_camps"] += $ready->total_ready_camps : $array[$key]["total_ready_camps"] = $ready->total_ready_camps;
+                    $array[$i]["name"] = $name;
+                    isset($array[$i]["total_ready_camps"]) ? $array[$i]["total_ready_camps"] += $ready->total_ready_camps : $array[$i]["total_ready_camps"] = $ready->total_ready_camps;
+                $j=1;
                 }
             }
             foreach ($camps_completed as $complete) {
                 if ($complete->name == $name) {
-                    $array[$key]["name"] = $name;
-                    isset($array[$key]["total_completed_camps"]) ? $array[$key]["total_completed_camps"] += $complete->total_completed_camps : $array[$key]["total_completed_camps"] = $complete->total_completed_camps;
+                    $array[$i]["name"] = $name;
+                    isset($array[$i]["total_completed_camps"]) ? $array[$i]["total_completed_camps"] += $complete->total_completed_camps : $array[$i]["total_completed_camps"] = $complete->total_completed_camps;
+                $j=1;
                 }
             }
             foreach ($camps_canceled as $canceled) {
                 if ($canceled->name == $name) {
-                    $array[$key]["name"] = $name;
-                    isset($array[$key]["total_canceled_camps"]) ? $array[$key]["total_canceled_camps"] += $canceled->total_canceled_camps : $array[$key]["total_canceled_camps"] = $canceled->total_canceled_camps;
+                    $array[$i]["name"] = $name;
+                    isset($array[$i]["total_canceled_camps"]) ? $array[$i]["total_canceled_camps"] += $canceled->total_canceled_camps : $array[$i]["total_canceled_camps"] = $canceled->total_canceled_camps;
+                $j=1;
                 }
             }
             foreach ($camp_slips as $slips) {
                 if ($slips->name == $name) {
-                    $array[$key]["name"] = $name;
-                    isset($array[$key]["total_slips"]) ? $array[$key]["total_slips"] += $slips->total_slips : $array[$key]["total_slips"] = $slips->total_slips;
+                    $array[$i]["name"] = $name;
+                    isset($array[$i]["total_slips"]) ? $array[$i]["total_slips"] += $slips->total_slips : $array[$i]["total_slips"] = $slips->total_slips;
+                $j=1;
                 }
             }
+            if ($j==1) {
+             $i++;   # code...
+            }
         }
-
-        return response()->json($array);
+        return response()->json(["data" => $array]);
     }
 
     public function getUsers(Request $request, $user_id)
