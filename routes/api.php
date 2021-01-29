@@ -56,4 +56,3 @@ Route::get('password/find/{token}', 'PasswordResetController@find');
 Route::post('password/forget/reset', 'PasswordResetController@reset');
 Route::get('get/ccl/medicines', 'ApiController@getCclMedicine');
 Route::get('get/other/medicines', 'ApiController@getOtherMedicine');
-Route::get('camp/auto/approve', 'ApiController@campAutoApprove');

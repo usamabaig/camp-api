@@ -303,10 +303,4 @@ class ApiController extends Controller
 
         return response()->json(['data' => $other_medicine]);
     }
-
-    public function campAutoApprove() {
-        Camp::whereDate('created_at', '<=', Carbon::now()->subDays(2))->where([
-            ['is_approved', '=', 0],
-        ])->update(['is_approved' => 1]);
-    }
 }
