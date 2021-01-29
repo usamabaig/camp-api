@@ -42,7 +42,7 @@ Route::get('patient/{patient_id}', 'ApiController@getPatient');
 Route::get('get/notifications/unread/{user_id}', 'ApiController@getUnreadNotifications');
 Route::get('notification/mark/read/{user_id}', 'ApiController@markNotificationAsRead');
 
-Route::post('get/camps/slips/{user_id}', 'ReportsController@getCampsSlips');
+Route::get('get/camps/slips/{user_id}', 'ReportsController@getCampsSlips');
 Route::post('get/camps/present/{user_id}', 'ReportsController@getPresentCamps');
 Route::post('get/users/report/{user_id}', 'ReportsController@getUsers');
 
@@ -56,3 +56,4 @@ Route::get('password/find/{token}', 'PasswordResetController@find');
 Route::post('password/forget/reset', 'PasswordResetController@reset');
 Route::get('get/ccl/medicines', 'ApiController@getCclMedicine');
 Route::get('get/other/medicines', 'ApiController@getOtherMedicine');
+Route::get('camp/auto/approve', 'ApiController@campAutoApprove');
