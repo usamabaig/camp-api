@@ -98,7 +98,7 @@ class ReportsController extends Controller
         $camps_canceled = DB::table('camps')
             ->join('users', 'camps.user_id', '=', 'users.id')
             ->selectRaw("COUNT(*) as total_canceled_camps, users.name")
-            ->whereNotNull("deleted_at")
+            ->whereNotNull("camps.deleted_at")
             ->whereIn("user_id", $users)
             ->groupBy("user_id")
             ->get();
