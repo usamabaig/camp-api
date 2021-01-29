@@ -77,7 +77,7 @@ class ReportsController extends Controller
             ->selectRaw("SUM(no_of_strips) as total_slips, users.name")
             ->where("camp_status", 2)
             ->whereIn("user_id", $user_ids)
-            ->groupBy("user_id")
+            ->groupBy("user_id", "name")
             ->get();
 
         // total ready camps
@@ -87,7 +87,7 @@ class ReportsController extends Controller
             ->where("camp_status", 0)
             ->where("is_approved", 1)
             ->whereIn("user_id", $user_ids)
-            ->groupBy("user_id")
+            ->groupBy("user_id", "name")
             ->get();
 
         // total completed camps
@@ -96,7 +96,7 @@ class ReportsController extends Controller
             ->selectRaw("COUNT(*) as total_completed_camps, users.name")
             ->where("camp_status", 2)
             ->whereIn("user_id", $user_ids)
-            ->groupBy("user_id")
+            ->groupBy("user_id", "name")
             ->get();
 
         // total canceled camps
@@ -105,7 +105,7 @@ class ReportsController extends Controller
             ->selectRaw("COUNT(*) as total_canceled_camps, users.name")
             ->whereNotNull("camps.deleted_at")
             ->whereIn("user_id", $user_ids)
-            ->groupBy("user_id")
+            ->groupBy("user_id", "name")
             ->get();
         $array = [];
         $i=0;
