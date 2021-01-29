@@ -104,7 +104,7 @@ class ReportsController extends Controller
             ->join('users', 'camps.user_id', '=', 'users.id')
             ->selectRaw("COUNT(*) as total_canceled_camps, users.name")
             ->whereNotNull("camps.deleted_at")
-            ->whereIn("user_id", $users_ids)
+            ->whereIn("user_id", $user_ids)
             ->groupBy("user_id")
             ->get();
         $array = [];
