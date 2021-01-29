@@ -11,6 +11,7 @@ use App\Region;
 use App\Role;
 use App\Team;
 use App\Territory;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use App\User;
 use Illuminate\Http\Request;
@@ -301,5 +302,12 @@ class ApiController extends Controller
         $other_medicine = OtherMedicine::all();
 
         return response()->json(['data' => $other_medicine]);
+    }
+
+    public function campAutoApprove() {
+        $query = Camp::whereDate('00', Carbon::now()->subDays(2))->where([
+            ['is_approved', '=', 0],
+        ])->get();
+        dd($query);
     }
 }
