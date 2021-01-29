@@ -67,48 +67,75 @@ class ReportsController extends Controller
             $date = [];
         }*/
 
-        $users = User::with('user_territory', 'user_district', 'user_region', 'user_team', 'multiple_teams', 'user_role')->users($user_id)->pluck("id");
+        $users = User::with('user_territory', 'user_district', 'user_region', 'user_team', 'multiple_teams', 'user_role')->users($user_id)->get();
+        $user_ids = $users->pluck("id");
+        $user_names = $users->pluck("name");
+
         // total slips used in completed camps
         $camp_slips = DB::table('camps')
             ->join('users', 'camps.user_id', '=', 'users.id')
             ->selectRaw("SUM(no_of_strips) as total_slips, users.name")
             ->where("camp_status", 2)
-            ->whereIn("user_id", $users)
+            ->whereIn("user_id", $user_ids)
             ->groupBy("user_id")
             ->get();
 
-        // total completed camps
+        // total ready camps
         $camps_ready = DB::table('camps')
             ->join('users', 'camps.user_id', '=', 'users.id')
             ->selectRaw("COUNT(*) as total_ready_camps, users.name")
             ->where("camp_status", 0)
             ->where("is_approved", 1)
-            ->whereIn("user_id", $users)
+            ->whereIn("user_id", $user_ids)
             ->groupBy("user_id")
             ->get();
 
+        // total completed camps
         $camps_completed = DB::table('camps')
             ->join('users', 'camps.user_id', '=', 'users.id')
             ->selectRaw("COUNT(*) as total_completed_camps, users.name")
             ->where("camp_status", 2)
-            ->whereIn("user_id", $users)
+            ->whereIn("user_id", $user_ids)
             ->groupBy("user_id")
             ->get();
 
+        // total canceled camps
         $camps_canceled = DB::table('camps')
             ->join('users', 'camps.user_id', '=', 'users.id')
             ->selectRaw("COUNT(*) as total_canceled_camps, users.name")
             ->whereNotNull("camps.deleted_at")
-            ->whereIn("user_id", $users)
+            ->whereIn("user_id", $users_ids)
             ->groupBy("user_id")
             ->get();
+        $array = [];
+        foreach ($user_names as $key=>$name) {
+            foreach ($camps_ready as $ready) {
+                if ($ready->name == $name) {
+                    $array[$key]["name"] = $name;
+                    isset($array[$key]["total_ready_camps"]) ? $array[$key]["total_ready_camps"] += $ready->total_ready_camps : $array[$key]["total_ready_camps"] = $ready->total_ready_camps;
+                }
+            }
+            foreach ($camps_completed as $complete) {
+                if ($complete->name == $name) {
+                    $array[$key]["name"] = $name;
+                    isset($array[$key]["total_completed_camps"]) ? $array[$key]["total_completed_camps"] += $complete->total_completed_camps : $array[$key]["total_completed_camps"] = $complete->total_completed_camps;
+                }
+            }
+            foreach ($camps_canceled as $canceled) {
+                if ($canceled->name == $name) {
+                    $array[$key]["name"] = $name;
+                    isset($array[$key]["total_canceled_camps"]) ? $array[$key]["total_canceled_camps"] += $canceled->total_canceled_camps : $array[$key]["total_canceled_camps"] = $canceled->total_canceled_camps;
+                }
+            }
+            foreach ($camp_slips as $slips) {
+                if ($slips->name == $name) {
+                    $array[$key]["name"] = $name;
+                    isset($array[$key]["total_slips"]) ? $array[$key]["total_slips"] += $slips->total_slips : $array[$key]["total_slips"] = $slips->total_slips;
+                }
+            }
+        }
 
-        return response()->json([
-            "ready_camps" => $camps_ready,
-            "completed_camps" => $camps_completed,
-            "canceled_camps" => $camps_canceled,
-            "total_slips" => $camp_slips
-        ]);
+        return response()->json($array);
     }
 
     public function getUsers(Request $request, $user_id)
