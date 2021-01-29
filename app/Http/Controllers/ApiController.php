@@ -305,7 +305,7 @@ class ApiController extends Controller
     }
 
     public function campAutoApprove() {
-        $query = Camp::whereDate('00', Carbon::now()->subDays(2))->where([
+        $query = Camp::whereDate('created_at', Carbon::now()->subDays(2))->where([
             ['is_approved', '=', 0],
         ])->get();
         dd($query);
