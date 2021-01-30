@@ -34,7 +34,7 @@ Route::get('patients/{camp_id}', 'ApiController@getPatients');
 Route::post('patient/add', 'ApiController@createPatient');
 Route::post('patient/drugs/add/{patient_id}', 'ApiController@addDrugsForPatients');
 Route::post('start/camp', 'ApiController@startCamp');
-Route::get('close/camp/{camp_id}', 'ApiController@closeCamp');
+Route::get('close/camp/{camp_id}/{used_strips?}', 'ApiController@closeCamp');
 Route::get('get/district/{district_id}', 'ApiController@getDistrict');
 Route::get('get/territory/{territory_id}', 'ApiController@getTerritory');
 Route::get('patient/{patient_id}', 'ApiController@getPatient');

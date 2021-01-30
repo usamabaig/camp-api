@@ -203,6 +203,7 @@ class ApiController extends Controller
         if ($d < 1) {
             $update_camp = Camp::find($camp->id);
             $update_camp->camp_status = 1;
+            $update_camp->no_of_received_strips = isset($request->received_strips) ? $request->received_strips : 0;
             $update_camp->save();
 
             return response()->json(['success' => 'Camp started successfully']);
@@ -220,10 +221,11 @@ class ApiController extends Controller
         return $current_time < $start_time || $current_time > $end_time;
     }
 
-    public function closeCamp($camp_id)
+    public function closeCamp($camp_id, $used_strips=0)
     {
         $camp = Camp::find($camp_id);
         $camp->camp_status = 2;
+        $camp->no_of_used_strips = $used_strips;
         $camp->save();
 
         return response()->json(['success' => 'Camp closed successfully']);
