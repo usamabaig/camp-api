@@ -74,10 +74,12 @@ class ReportsController extends Controller
         // total slips used in completed camps
         $camp_slips = DB::table('camps')
             ->join('users', 'camps.user_id', '=', 'users.id')
-            ->selectRaw("SUM(no_of_strips) as total_slips, users.name")
+            ->leftJoin('patients', 'camps.id', '=', 'patients.camp_id')
+            ->selectRaw("camps.id as camp_id, camps.dr_name, camps.address, no_of_strips as total_requested_slips, no_of_used_strips as total_used_strips, no_of_received_strips as total_received_strips, COUNT(case when blood_sugar != 'N/A' then blood_sugar end) as actual_used_strips, users.name")
             ->where("camp_status", 2)
+            ->where("camp_type", 3)
             ->whereIn("user_id", $user_ids)
-            ->groupBy("user_id", "name")
+            ->groupBy("camps.id")
             ->get();
 
         // total ready camps
@@ -132,17 +134,26 @@ class ReportsController extends Controller
                 $j=1;
                 }
             }
-            foreach ($camp_slips as $slips) {
-                if ($slips->name == $name) {
-                    $array[$i]["name"] = $name;
-                    isset($array[$i]["total_slips"]) ? $array[$i]["total_slips"] += $slips->total_slips : $array[$i]["total_slips"] = $slips->total_slips;
-                $j=1;
-                }
-            }
             if ($j==1) {
              $i++;   # code...
             }
         }
+        foreach ($array as $key=>$item) {
+            foreach ($camp_slips as $slips) {
+                if ($slips->name == $item["name"]) {
+                    $array[$key]["camps"][] = [
+                        "camp_id" => $slips->camp_id,
+                        "dr_name" => $slips->dr_name,
+                        "address" => $slips->address,
+                        "total_requested_slips" => $slips->total_requested_slips,
+                        "total_used_strips" => $slips->total_used_strips,
+                        "total_received_strips" => $slips->total_received_strips,
+                        "actual_used_strips" => $slips->actual_used_strips,
+                    ];
+                }
+            }
+        }
+
         return response()->json(["data" => $array]);
     }
 
