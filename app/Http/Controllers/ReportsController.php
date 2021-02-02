@@ -79,7 +79,7 @@ class ReportsController extends Controller
             ->where("camp_status", 2)
             ->where("camp_type", 3)
             ->whereIn("user_id", $user_ids)
-            ->groupBy("camps.id", "dr_name", "address", "name")
+            ->groupBy("camps.id", "dr_name", "address", "name", "no_of_strips", "no_of_used_strips", "no_of_received_strips")
             ->get();
 
         // total ready camps
