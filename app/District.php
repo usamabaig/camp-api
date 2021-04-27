@@ -14,4 +14,9 @@ class District extends Model
     protected $fillable = [
         'district_name'
     ];
+
+    public function region()
+    {
+        return $this->hasOne('App\Region', 'id', 'region_id');
+    }
 }

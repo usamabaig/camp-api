@@ -14,4 +14,9 @@ class Region extends Model
     protected $fillable = [
         'region_name'
     ];
+
+    public function team()
+    {
+        return $this->hasOne('App\Team', 'id', 'team_id');
+    }
 }

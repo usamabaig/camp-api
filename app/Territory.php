@@ -14,4 +14,9 @@ class Territory extends Model
     protected $fillable = [
         'territory_name'
     ];
+
+    public function district()
+    {
+        return $this->hasOne('App\District', 'id', 'district_id');
+    }
 }
