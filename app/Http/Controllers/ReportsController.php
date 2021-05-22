@@ -204,7 +204,7 @@ class ReportsController extends Controller
                 }
             }
         }
-        $data_keys = ['Name', 'Total Ready Camps', 'Total Completed Camps', 'Total Canceled Camps'];
+        $data_keys = ['Name', 'Total Ready Camps', 'Total Completed Camps', 'Total Canceled Camps', 'Total Camps', 'Total Requested Strips', 'Total Used Strips', 'Total Received Strips', 'Actual Used Strips'];
 
         if (isset($request->action) && $request->action == 'excel') {
             return $this->export('slips', $data_keys, $array);
@@ -327,7 +327,20 @@ class ReportsController extends Controller
             }
         } else if ($name == 'slips') {
             foreach($data_values as $row) {
-                fputcsv($handle, [@$row['name'], @$row['total_ready_camps'], @$row['total_completed_camps'], @$row['total_canceled_camps']]);
+                $request_strips = 0;
+                $used_strips = 0;
+                $received_strips = 0;
+                $actual_used_strips = 0;
+                if (isset($row['camps'])) {
+                    foreach ($row['camps'] as $camp) {
+                        $request_strips += $camp['total_requested_slips'];
+                        $used_strips += $camp['total_used_strips'];
+                        $received_strips += $camp['total_received_strips'];
+                        $actual_used_strips += $camp['actual_used_strips'];
+                    }
+                }
+                $total = @$row['total_ready_camps'] + @$row['total_completed_camps'] + @$row['total_canceled_camps'];
+                fputcsv($handle, [@$row['name'], @$row['total_ready_camps'], @$row['total_completed_camps'], @$row['total_canceled_camps'], $total, $request_strips, $used_strips, $received_strips, $actual_used_strips]);
             }
         }
         fclose($handle);
