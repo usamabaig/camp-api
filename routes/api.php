@@ -42,7 +42,7 @@ Route::get('patient/{patient_id}', 'ApiController@getPatient');
 Route::get('get/notifications/unread/{user_id}', 'ApiController@getUnreadNotifications');
 Route::get('notification/mark/read/{user_id}', 'ApiController@markNotificationAsRead');
 
-Route::get('get/camps/slips/{user_id}', 'ReportsController@getCampsSlips');
+Route::post('get/camps/slips/{user_id}', 'ReportsController@getCampsSlips');
 Route::post('get/camps/present/{user_id}', 'ReportsController@getPresentCamps');
 Route::post('get/users/report/{user_id}', 'ReportsController@getUsers');
 
