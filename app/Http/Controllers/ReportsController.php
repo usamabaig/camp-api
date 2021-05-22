@@ -59,13 +59,13 @@ class ReportsController extends Controller
 
     public function getCampsSlips(Request $request, $user_id)
     {
-        /*if ($request->startDate != '' || $request->endDate != '') {
+        if ($request->startDate != '' || $request->endDate != '') {
             $from_date = isset($request->startDate) ? date('Y-m-d H:i:s', strtotime($request->startDate)) : date('Y-m-d 00:00:00',strtotime("-1 days"));
             $to_date = isset($request->endDate) ? date('Y-m-d H:i:s', strtotime($request->endDate)) : date('Y-m-d 23:59:59',strtotime("-1 year"));
             $date = [$from_date, $to_date];
         } else {
             $date = [];
-        }*/
+        }
 
         $users = User::with('user_territory', 'user_district', 'user_region', 'user_team', 'multiple_teams', 'user_role')->users($user_id)->get();
         $user_ids = $users->pluck("id");
@@ -79,6 +79,16 @@ class ReportsController extends Controller
             ->where("camp_status", 2)
             ->where("camp_type", 3)
             ->whereIn("user_id", $user_ids)
+            ->where(function ($query) use ($request) {
+                if (isset($request->campType)){
+                    $query->where('camp_type', '=', $request->campType);
+                }
+            })
+            ->where(function ($query) use ($date) {
+                if ($date != []){
+                    $query->whereBetween('camp_datetime', $date);
+                }
+            })
             ->groupBy("camps.id", "dr_name", "address", "name", "no_of_strips", "no_of_used_strips", "no_of_received_strips")
             ->get();
 
@@ -89,6 +99,16 @@ class ReportsController extends Controller
             ->where("camp_status", 0)
             ->where("is_approved", 1)
             ->whereIn("user_id", $user_ids)
+            ->where(function ($query) use ($request) {
+                if (isset($request->campType)){
+                    $query->where('camp_type', '=', $request->campType);
+                }
+            })
+            ->where(function ($query) use ($date) {
+                if ($date != []){
+                    $query->whereBetween('camp_datetime', $date);
+                }
+            })
             ->groupBy("user_id", "name")
             ->get();
 
@@ -98,6 +118,16 @@ class ReportsController extends Controller
             ->selectRaw("COUNT(*) as total_completed_camps, users.name")
             ->where("camp_status", 2)
             ->whereIn("user_id", $user_ids)
+            ->where(function ($query) use ($request) {
+                if (isset($request->campType)){
+                    $query->where('camp_type', '=', $request->campType);
+                }
+            })
+            ->where(function ($query) use ($date) {
+                if ($date != []){
+                    $query->whereBetween('camp_datetime', $date);
+                }
+            })
             ->groupBy("user_id", "name")
             ->get();
 
@@ -107,6 +137,16 @@ class ReportsController extends Controller
             ->selectRaw("COUNT(*) as total_canceled_camps, users.name")
             ->whereNotNull("camps.deleted_at")
             ->whereIn("user_id", $user_ids)
+            ->where(function ($query) use ($request) {
+                if (isset($request->campType)){
+                    $query->where('camp_type', '=', $request->campType);
+                }
+            })
+            ->where(function ($query) use ($date) {
+                if ($date != []){
+                    $query->whereBetween('camp_datetime', $date);
+                }
+            })
             ->groupBy("user_id", "name")
             ->get();
         $array = [];
