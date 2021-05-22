@@ -156,21 +156,32 @@ class ReportsController extends Controller
             foreach ($camps_ready as $ready) {
                 if ($ready->name == $name) {
                     $array[$i]["name"] = $name;
-                    isset($array[$i]["total_ready_camps"]) ? $array[$i]["total_ready_camps"] += $ready->total_ready_camps : $array[$i]["total_ready_camps"] = $ready->total_ready_camps;
+                    $array[$i]["total_completed_camps"] = 0;
+                    $array[$i]["total_canceled_camps"] = 0;
+                    isset($array[$i]["total_ready_camps"]) ? $array[$i]["total_ready_camps"] += $ready->total_ready_camps : $array[$i]["total_ready_camps"] = $ready->total_ready_camps ?? 0;
                 $j=1;
                 }
             }
             foreach ($camps_completed as $complete) {
                 if ($complete->name == $name) {
                     $array[$i]["name"] = $name;
-                    isset($array[$i]["total_completed_camps"]) ? $array[$i]["total_completed_camps"] += $complete->total_completed_camps : $array[$i]["total_completed_camps"] = $complete->total_completed_camps;
+                    if (!isset($array[$i]["total_ready_camps"])) {
+                        $array[$i]["total_ready_camps"] = 0;
+                    }
+                    isset($array[$i]["total_completed_camps"]) ? $array[$i]["total_completed_camps"] += $complete->total_completed_camps : $array[$i]["total_completed_camps"] = $complete->total_completed_camps ?? 0;
                 $j=1;
                 }
             }
             foreach ($camps_canceled as $canceled) {
                 if ($canceled->name == $name) {
                     $array[$i]["name"] = $name;
-                    isset($array[$i]["total_canceled_camps"]) ? $array[$i]["total_canceled_camps"] += $canceled->total_canceled_camps : $array[$i]["total_canceled_camps"] = $canceled->total_canceled_camps;
+                    if (!isset($array[$i]["total_ready_camps"])) {
+                        $array[$i]["total_ready_camps"] = 0;
+                    }
+                    if (!isset($array[$i]["total_completed_camps"])) {
+                        $array[$i]["total_completed_camps"] = 0;
+                    }
+                    isset($array[$i]["total_canceled_camps"]) ? $array[$i]["total_canceled_camps"] += $canceled->total_canceled_camps : $array[$i]["total_canceled_camps"] = $canceled->total_canceled_camps ?? 0;
                 $j=1;
                 }
             }
@@ -193,8 +204,13 @@ class ReportsController extends Controller
                 }
             }
         }
+        $data_keys = ['Name', 'Total Ready Camps', 'Total Completed Camps', 'Total Canceled Camps'];
 
-        return response()->json(["data" => $array]);
+        if (isset($request->action) && $request->action == 'excel') {
+            return $this->export('slips', $data_keys, $array);
+        } else {
+            return response()->json(["data" => $array]);
+        }
     }
 
     public function getUsers(Request $request, $user_id)
@@ -308,6 +324,10 @@ class ReportsController extends Controller
         } else if ($name == 'doctors') {
             foreach($data_values as $row) {
                 fputcsv($handle, [@$row->dr_name, @$row->dr_id, @$row->dr_phone_no]);
+            }
+        } else if ($name == 'slips') {
+            foreach($data_values as $row) {
+                fputcsv($handle, [@$row['name'], @$row['total_ready_camps'], @$row['total_completed_camps'], @$row['total_canceled_camps']]);
             }
         }
         fclose($handle);
