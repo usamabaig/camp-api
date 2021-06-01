@@ -42,9 +42,9 @@ class CampController extends Controller
     public function store(Request $request)
     {
         $camp_id = $this->createOrUpdateCamp($request, null);
-        if ($camp_id == false) {
+        /*if ($camp_id == false) {
             return response()->json(['success' => "Doctor ID already Exists."], 400);
-        }
+        }*/
 
         $spo_region = User::where('id', $request->campUserID)->value('region');
         $spo_admin = User::where('region', $spo_region)->whereIn('designation', [1,2,3,4,5,6,7,8,9,10])->get();
@@ -116,7 +116,7 @@ class CampController extends Controller
 
     private function createOrUpdateCamp($request, $id = null)
     {
-        if (isset($id)) {
+        /*if (isset($id)) {
             $c = Camp::find($id);
             if ($c->dr_id != $request->doctorID) {
                 return false;
@@ -126,7 +126,7 @@ class CampController extends Controller
             if ($c > 0) {
                 return false;
             }
-        }
+        }*/
         $camp = isset($id) ? Camp::find($id) : new Camp();
         $camp->camp_type = $request->campType;
         $camp->dr_name = $request->doctorName;
