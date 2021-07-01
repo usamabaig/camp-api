@@ -77,7 +77,7 @@ class ReportsController extends Controller
             ->leftJoin('patients', 'camps.id', '=', 'patients.camp_id')
             ->selectRaw("camps.id as camp_id, camps.dr_name, camps.address, no_of_strips as total_requested_slips, no_of_used_strips as total_used_strips, no_of_received_strips as total_received_strips, COUNT(case when blood_sugar != 'N/A' then blood_sugar end) as actual_used_strips, users.name")
             ->where("camp_status", 2)
-            ->where("camp_type", 3)
+//            ->where("camp_type", 3)
             ->whereIn("user_id", $user_ids)
             ->where(function ($query) use ($request) {
                 if (isset($request->campType)){
